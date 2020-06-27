@@ -1,0 +1,21 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<TargetFrameworks>netstandard2.1;netcoreapp3.1</TargetFrameworks>
+		<Authors>Craiqser</Authors>
+		<PackageLicenseExpression>MIT</PackageLicenseExpression>
+		<RepositoryType>Git</RepositoryType>
+		<RepositoryUrl>https://github.com/Craiqser/CraB.git</RepositoryUrl>
+		<PackageTags>Craiqser;CraB</PackageTags>
+		<Description>Craiqser Base library part.</Description>
+		<Copyright>Copyright © Craiqser</Copyright>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<PackageReference Include="Microsoft.CodeAnalysis.FxCopAnalyzers" Version="3.0.0">
+			<PrivateAssets>all</PrivateAssets>
+			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+		</PackageReference>
+	</ItemGroup>
+
+</Project>
