@@ -4,7 +4,7 @@ using System.Collections.Concurrent;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace CraB.Core.Cache
+namespace CraB.Core
 {
 	/// <summary>Реализация кэширования в памяти.</summary>
 	/// <typeparam name="T">Тип кэшируемых значений.</typeparam>
@@ -118,6 +118,23 @@ namespace CraB.Core.Cache
 		public async Task<T> Value(object key, Func<Task<T>> valueNew)
 		{
 			return await Value(key, valueNew, null).ConfigureAwait(false);
+		}
+
+		/// <summary>Получает значение или создаёт новое.</summary>
+		/// <param name="key">Ключ.</param>
+		/// <param name="valueNew">Функция создания кэшируемого значения для данного ключа, если оно ранее отсутствовало.</param>
+		/// <param name="expiration">Время хранения (TimeSpan.Zero - постоянное хранение).</param>
+		public T Value(object key, Func<T> valueNew, TimeSpan expiration)
+		{
+			MemoryCacheEntryOptions memoryCacheEntryOptions = new MemoryCacheEntryOptions
+			{
+				Size = 1,
+				Priority = (expiration == TimeSpan.Zero) ? CacheItemPriority.NeverRemove : CacheItemPriority.Normal,
+				SlidingExpiration = expiration,
+				AbsoluteExpirationRelativeToNow = expiration
+			};
+
+			return Value(key, valueNew, memoryCacheEntryOptions);
 		}
 
 		protected virtual void Dispose(bool disposing) // Реализация шаблона Dispose().
