@@ -1,4 +1,4 @@
-﻿using Dapper;
+﻿using System;
 using System.Data;
 
 namespace CraB.Sql
