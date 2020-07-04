@@ -51,6 +51,13 @@ namespace CraB.Core
 		public CacheMemory() : this(new MemoryCacheOptions())
 		{ }
 
+		/// <summary>Удаляет объект из кэша.</summary>
+		/// <param name="key">Ключ.</param>
+		public void Remove(object key)
+		{
+			_cache.Remove(key);
+		}
+
 		/// <summary>Получает значение или создаёт новое.</summary>
 		/// <param name="key">Ключ.</param>
 		/// <param name="valueNew">Функция создания кэшируемого значения для данного ключа, если оно ранее отсутствовало.</param>
@@ -135,6 +142,15 @@ namespace CraB.Core
 			};
 
 			return Value(key, valueNew, memoryCacheEntryOptions);
+		}
+
+		/// <summary>Получает значение заданного типа и возвращает <c>true</c>, если значение присутствовало в кэше.</summary>
+		/// <param name="key">Ключ.</param>
+		/// <param name="value">Возвращаемое значение, если присутствует в кэше, иначе null.</param>
+		/// <returns><c>True</c>, если значение найдено, иначе <c>false</c>.</returns>
+		public bool Value<TItem>(object key, out TItem value)
+		{
+			return _cache.TryGetValue(key, out value);
 		}
 
 		protected virtual void Dispose(bool disposing) // Реализация шаблона Dispose().

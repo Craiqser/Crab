@@ -10,7 +10,7 @@ namespace CraB.Core
 	{
 		/// <summary>Загружает конфигурацию для указанного типа настройки.</summary>
 		/// <param name="type">Тип настройки или тип с атрибутом <see cref="SettingKeyAttribute"/>.</param>
-		/// <returns>Загруженный или созданный объект настройки данного типа.</returns>
+		/// <returns>Загруженный объект настройки данного типа.</returns>
 		/// <exception cref="ArgumentNullException" />
 		public object Load(Type type)
 		{
@@ -29,9 +29,8 @@ namespace CraB.Core
 				}
 
 				string value = configuration[key];
-				object valueType = ConfigurationBinder.Get(configuration, type);
 
-				return (valueType is object) ? Activator.CreateInstance(type) : value;
+				return (value is object) ? value : Activator.CreateInstance(type);
 			});
 		}
 	}
