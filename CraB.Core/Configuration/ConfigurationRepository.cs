@@ -19,7 +19,7 @@ namespace CraB.Core
 			SettingKeyAttribute keyAttr = type.GetCustomAttribute<SettingKeyAttribute>();
 			string key = (keyAttr == null) ? type.Name : keyAttr.SettingKey;
 
-			return Cache.Value($"AppSetting:{type.FullName}", TimeSpan.Zero, delegate ()
+			return Cache.Value($"{CachePrefix.AppSetting}{type.FullName}", TimeSpan.Zero, () =>
 			{
 				IConfiguration configuration = Dependencies.Resolve<IConfiguration>();
 

@@ -20,7 +20,7 @@ namespace CraB.Core
 		/// <param name="limit">Лимит (количество разрешённых раз).</param>
 		public Throttler(string key, TimeSpan duration, int limit)
 		{
-			_cacheKey = $"Check:{key}:{duration.Ticks.ToInvariant()}";
+			_cacheKey = $"{CachePrefix.Check}{key}:{duration.Ticks.ToInvariant()}";
 			_duration = duration;
 			_limit = limit;
 		}
@@ -38,7 +38,7 @@ namespace CraB.Core
 			}
 			else
 			{
-				Cache.Value(_cacheKey, _duration, new CounterHits { Counter = 1 });
+				_ = Cache.Value(_cacheKey, _duration, new CounterHits { Counter = 1 });
 			}
 
 			return true;

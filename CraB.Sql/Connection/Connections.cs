@@ -16,7 +16,7 @@ namespace CraB.Sql
 		/// <summary>Получает строку соединения по её ключу.</summary>
 		/// <param name="key">Ключ подключения.</param>
 		/// <returns>Строка соединения.</returns>
-		public static string ConnectionStringGet(string key)
+		private static string ConnectionStringGetByKey(string key)
 		{
 			if (!connections.TryGetValue(key, out string connectionString))
 			{
@@ -45,7 +45,7 @@ namespace CraB.Sql
 		/// <returns><see cref="IDbConnection" /></returns>
 		public static IDbConnection New(string connectionKey)
 		{
-			return new SqlConnection(ConnectionStringGet(connectionKey));
+			return new SqlConnection(ConnectionStringGetByKey(connectionKey));
 		}
 
 		/// <summary>Создает новое соединение из типа указанного класса, определяя ключ соединения по его атрибуту <see cref="ConnectionKeyAttribute" />.</summary>
