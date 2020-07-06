@@ -1,0 +1,23 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<TargetFramework>net5.0</TargetFramework>
+		<Authors>Craiqser</Authors>
+		<PackageLicenseExpression>MIT</PackageLicenseExpression>
+		<RepositoryType>Git</RepositoryType>
+		<RepositoryUrl>https://github.com/Craiqser/CraB.git</RepositoryUrl>
+		<PackageTags>Craiqser;CraB</PackageTags>
+		<Description>Craiqser Base library part.</Description>
+		<Copyright>Copyright © Craiqser</Copyright>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<PackageReference Include="Microsoft.CodeAnalysis.FxCopAnalyzers" Version="3.0.0">
+			<PrivateAssets>all</PrivateAssets>
+			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+		</PackageReference>
+		<PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" Version="5.0.0-preview.6.20305.6" />
+		<PackageReference Include="Microsoft.IdentityModel.Tokens" Version="6.7.1" />
+	</ItemGroup>
+
+</Project>

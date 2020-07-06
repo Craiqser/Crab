@@ -29,7 +29,7 @@ namespace CraB.Core
 		/// <returns><c>True</c>, если лимит не превышен, иначе <c>false</c>.</returns>
 		public bool Check()
 		{
-			if (Cache.Value(_cacheKey, out CounterHits hit))
+			if (CacheApp.Value(_cacheKey, out CounterHits hit))
 			{
 				if (hit.Counter++ >= _limit)
 				{
@@ -38,7 +38,7 @@ namespace CraB.Core
 			}
 			else
 			{
-				_ = Cache.Value(_cacheKey, _duration, new CounterHits { Counter = 1 });
+				_ = CacheApp.Value(_cacheKey, _duration, new CounterHits { Counter = 1 });
 			}
 
 			return true;
@@ -47,7 +47,7 @@ namespace CraB.Core
 		/// <summary>Сброс ограничителя (удаление из кэша).</summary>
 		public void Reset()
 		{
-			Cache.Remove(_cacheKey);
+			CacheApp.Remove(_cacheKey);
 		}
 	}
 }

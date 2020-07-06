@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 namespace CraB.Core
 {
 	/// <summary>Реализация кэширования в памяти.</summary>
-	public static class Cache
+	public static class CacheApp
 	{
 		private static readonly MemoryCache _cache = new MemoryCache(new MemoryCacheOptions());
 		private static readonly ConcurrentDictionary<object, SemaphoreSlim> _locks = new ConcurrentDictionary<object, SemaphoreSlim>();
@@ -57,8 +57,8 @@ namespace CraB.Core
 			{
 				Size = 1,
 				Priority = (expiration == TimeSpan.Zero) ? CacheItemPriority.NeverRemove : CacheItemPriority.Normal,
-				SlidingExpiration = expiration,
-				AbsoluteExpirationRelativeToNow = expiration
+				SlidingExpiration = null,
+				AbsoluteExpirationRelativeToNow = (expiration == TimeSpan.Zero) ? (TimeSpan?)null : expiration
 			});
 		}
 
@@ -81,6 +81,14 @@ namespace CraB.Core
 		public static bool Value<TItem>(string key, out TItem value)
 		{
 			return _cache.TryGetValue(key, out value);
+		}
+
+		/// <summary>Получает значение заданного типа.</summary>
+		/// <param name="key">Ключ.</param>
+		/// <returns><typeparamref name="TItem" /></returns>
+		public static TItem Value<TItem>(string key)
+		{
+			return (TItem)_cache.Get(key);
 		}
 
 		/// <summary>Асинхронно получает значение или создаёт новое.</summary>
