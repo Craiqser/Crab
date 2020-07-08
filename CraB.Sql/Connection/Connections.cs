@@ -51,7 +51,7 @@ namespace CraB.Sql
 		/// <summary>Создает новое соединение из типа указанного класса, определяя ключ соединения по его атрибуту <see cref="ConnectionKeyAttribute" />.</summary>
 		/// <typeparam name="T">Тип указанного класса.</typeparam>
 		/// <returns><see cref="IDbConnection" /></returns>
-		/// <exception cref="ArgumentOutOfRangeException">Type has no ConnectionKey attribute.</exception>
+		/// <exception cref="ArgumentOutOfRangeException" />
 		public static IDbConnection New<T>() where T : class
 		{
 			ConnectionKeyAttribute attr = typeof(T).GetCustomAttribute<ConnectionKeyAttribute>();

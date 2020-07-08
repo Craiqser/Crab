@@ -1,16 +1,15 @@
 ﻿using CraB.Core;
 using CraB.Sql;
-using Dapper;
 using Microsoft.IdentityModel.Tokens;
 using System;
 using System.Collections.Generic;
-using System.Data;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
+using System.Threading.Tasks;
 
 namespace CraB.Web
 {
-	public class UserService<TUser> where TUser : IAuthUser
+	public static class UserService<TUser> where TUser : IAuthUser
 	{
 		private static string AuthenticationTicket(string userName)
 		{
@@ -31,18 +30,27 @@ namespace CraB.Web
 
 		private static TUser GetByUserName(string userName)
 		{
-			using IDbConnection connection = Connections.New("Default");
 			string sql = "select t.* from dbo.Users as t with(nolock) where (t.UserName = @UserName);";
-
-			return connection.QuerySingleOrDefault<TUser>(sql, new { UserName = userName });
+			return Query.SingleOrDefault<TUser>(sql, new { UserName = userName });
 		}
 
-		public TUser Get(string userName)
+		private static async Task<TUser> GetByUserNameAsync(string userName)
+		{
+			string sql = "select t.* from dbo.Users as t with(nolock) where (t.UserName = @UserName);";
+			return await Query.SingleOrDefaultAsync<TUser>(sql, new { UserName = userName });
+		}
+
+		public static TUser Get(string userName)
 		{
 			return CacheApp.Value($"{CachePrefix.User}{userName}", TimeSpan.FromHours(10), () => { return GetByUserName(userName); });
 		}
 
-		public LoginResponseModel Login(LoginRequestModel loginRequestModel)
+		public static async Task<TUser> GetAsync(string userName)
+		{
+			return await CacheApp.Value($"{CachePrefix.User}{userName}", TimeSpan.FromHours(10), async () => { return await GetByUserNameAsync(userName); });
+		}
+
+		public static async Task<LoginResponseModel> LoginAsync(LoginRequestModel loginRequestModel)
 		{
 			LoginResponseModel loginFailedModel = new LoginResponseModel { Successful = false, Error = "Login and password are invalid." };
 
@@ -54,7 +62,7 @@ namespace CraB.Web
 			Throttler throttler = new Throttler($"{CachePrefix.User}{loginRequestModel.UserName.ToUpperInvariant()}", TimeSpan.FromMinutes(15), 5);
 			TUser user;
 
-			if (loginRequestModel.Password.NullOrEmpty() || ((user = Get(loginRequestModel.UserName)) == null) || (user.Active != DeleteOffActive.Active))
+			if (loginRequestModel.Password.NullOrEmpty() || ((user = await GetAsync(loginRequestModel.UserName)) == null) || (user.Active != DeleteOffActive.Active))
 			{
 				_ = throttler.Check();
 				return loginFailedModel;

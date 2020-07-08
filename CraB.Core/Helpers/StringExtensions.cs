@@ -56,6 +56,14 @@ namespace CraB.Core
 			return string.IsNullOrEmpty(value);
 		}
 
+		/// <summary>Проверяет, действительно ли указанная строка имеет значение <c>null</c>, или только пробельные символы, или является пустой строкой ("").</summary>
+		/// <param name="value">Строка для проверки.</param>
+		/// <returns>Значение <c>true</c>, если строка равна <c>null</c>, содержит только пробельные символы или равняется пустой строке (""); в противном случае — <c>false</c>.</returns>
+		public static bool NullOrWhiteSpace(this string value)
+		{
+			return string.IsNullOrWhiteSpace(value);
+		}
+
 		/// <summary>Преобразует строку к типу <see cref="int" />.</summary>
 		/// <param name="value">Строка для проверки.</param>
 		/// <returns>Значение типа <see cref="int" /> или <see cref="Nullable{T}" />, если параметр <paramref name="value"/> равен <c>null</c>, пустой ("") или недопустимой строке.</returns>

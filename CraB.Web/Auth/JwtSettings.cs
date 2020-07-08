@@ -1,7 +1,11 @@
 ﻿using CraB.Core;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
+using Newtonsoft.Json;
 using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Security.Claims;
 using System.Text;
 
 namespace CraB.Web
@@ -17,6 +21,27 @@ namespace CraB.Web
 		public int ExpiryDays { get; }
 		public string Issuer { get; }
 		public SecurityKey Key { get; }
+
+		public static IEnumerable<Claim> ParseClaimsFromJwt(string jwt)
+		{
+			List<Claim> claims = new List<Claim>();
+			string tokenClaims = Encoding.UTF8.GetString(Base64Parse(jwt.Split('.')[1]));
+			Dictionary<string, object> keyValuePairs = JsonConvert.DeserializeObject<Dictionary<string, object>>(tokenClaims);
+			claims.AddRange(keyValuePairs.Select(kvp => new Claim(kvp.Key, kvp.Value.ToString())));
+
+			return claims;
+		}
+
+		private static byte[] Base64Parse(string base64)
+		{
+			switch (base64.Length % 4)
+			{
+				case 2: base64 += "=="; break;
+				case 3: base64 += "="; break;
+			}
+
+			return Convert.FromBase64String(base64);
+		}
 
 		public JwtSettings(string audience, int expiryDays, string issuer, SecurityKey key)
 		{
