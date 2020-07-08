@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
-		<TargetFramework>net5.0</TargetFramework>
+		<TargetFrameworks>netstandard2.1;netcoreapp3.1</TargetFrameworks>
 		<Authors>Craiqser</Authors>
 		<PackageLicenseExpression>MIT</PackageLicenseExpression>
 		<RepositoryType>Git</RepositoryType>
@@ -12,12 +12,12 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<PackageReference Include="Microsoft.CodeAnalysis.FxCopAnalyzers" Version="3.0.0">
-			<PrivateAssets>all</PrivateAssets>
-			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-		</PackageReference>
-		<PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" Version="5.0.0-preview.6.20305.6" />
-		<PackageReference Include="Microsoft.IdentityModel.Tokens" Version="6.7.1" />
+	  <PackageReference Include="System.ComponentModel.Annotations" Version="4.7.0" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <ProjectReference Include="..\CraB.Core\CraB.Core.csproj" />
+	  <ProjectReference Include="..\CraB.Sql\CraB.Sql.csproj" />
 	</ItemGroup>
 
 </Project>
