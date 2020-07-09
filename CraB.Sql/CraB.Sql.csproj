@@ -21,11 +21,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <Folder Include="Attributes\" />
-	</ItemGroup>
-
-	<ItemGroup>
-	  <ProjectReference Include="..\CraB.Core\CraB.Core.csproj" />
+		<ProjectReference Include="..\CraB.Core\CraB.Core.csproj" />
 	</ItemGroup>
 
 </Project>

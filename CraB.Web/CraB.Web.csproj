@@ -12,12 +12,16 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-	  <PackageReference Include="System.ComponentModel.Annotations" Version="4.7.0" />
+		<PackageReference Include="Microsoft.CodeAnalysis.FxCopAnalyzers" Version="3.0.0">
+			<PrivateAssets>all</PrivateAssets>
+			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+		</PackageReference>
+		<PackageReference Include="System.ComponentModel.Annotations" Version="4.7.0" />
 	</ItemGroup>
 
 	<ItemGroup>
-	  <ProjectReference Include="..\CraB.Core\CraB.Core.csproj" />
-	  <ProjectReference Include="..\CraB.Sql\CraB.Sql.csproj" />
+		<ProjectReference Include="..\CraB.Core\CraB.Core.csproj" />
+		<ProjectReference Include="..\CraB.Sql\CraB.Sql.csproj" />
 	</ItemGroup>
 
 </Project>

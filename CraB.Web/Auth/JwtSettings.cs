@@ -22,10 +22,12 @@ namespace CraB.Web
 		public string Issuer { get; }
 		public SecurityKey Key { get; }
 
-		public static IEnumerable<Claim> ParseClaimsFromJwt(string jwt)
+		public static IEnumerable<Claim> ParseClaimsFromJwt(string jwtClaims)
 		{
+			jwtClaims.NotNull(nameof(jwtClaims));
+
 			List<Claim> claims = new List<Claim>();
-			string tokenClaims = Encoding.UTF8.GetString(Base64Parse(jwt.Split('.')[1]));
+			string tokenClaims = Encoding.UTF8.GetString(Base64Parse(jwtClaims.Split('.')[1]));
 			Dictionary<string, object> keyValuePairs = JsonConvert.DeserializeObject<Dictionary<string, object>>(tokenClaims);
 			claims.AddRange(keyValuePairs.Select(kvp => new Claim(kvp.Key, kvp.Value.ToString())));
 
