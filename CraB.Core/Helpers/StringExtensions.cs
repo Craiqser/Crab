@@ -1,10 +1,54 @@
 ﻿using System;
+using System.Globalization;
+using System.Text.RegularExpressions;
 
 namespace CraB.Core
 {
 	/// <summary>Содержит методы расширения для строк.</summary>
 	public static class StringExtensions
 	{
+		/// <summary>Проверяет валидность адреса электронной почты.</summary>
+		/// <param name="email">Строка с адресом электронной почты.</param>
+		/// <returns>Если адрес корректный, то возвращает <c>true</c>, иначе <c>false</c>.</returns>
+		public static bool EmailValid(this string email)
+		{
+			if (email.NullOrWhiteSpace())
+			{
+				return false;
+			}
+
+			try
+			{
+				email = Regex.Replace(email, @"(@)(.+)$", DomainMapper, RegexOptions.None, TimeSpan.FromMilliseconds(200)); // Normalize the domain.
+
+				static string DomainMapper(Match match) // Examines the domain part of the email and normalizes it.
+				{
+					IdnMapping idn = new IdnMapping(); // Use IdnMapping class to convert Unicode domain names.
+					string domainName = idn.GetAscii(match.Groups[2].Value); // Pull out and process domain name (throws ArgumentException on invalid).
+
+					return match.Groups[1].Value + domainName;
+				}
+			}
+			catch (RegexMatchTimeoutException)
+			{
+				return false;
+			}
+			catch (ArgumentException)
+			{
+				return false;
+			}
+
+			try
+			{
+				return Regex.IsMatch(email, @"^(?("")("".+?(?<!\\)""@)|(([0-9a-z]((\.(?!\.))|[-!#\$%&'\*\+/=\?\^`\{\}\|~\w])*)(?<=[0-9a-z])@))"
+					+ @"(?(\[)(\[(\d{1,3}\.){3}\d{1,3}\])|(([0-9a-z][-0-9a-z]*[0-9a-z]*\.)+[a-z0-9][\-a-z0-9]{0,22}[a-z0-9]))$", RegexOptions.IgnoreCase, TimeSpan.FromMilliseconds(250));
+			}
+			catch (RegexMatchTimeoutException)
+			{
+				return false;
+			}
+		}
+
 		/// <summary>Проверяет, что указанная строка не равна <c>null</c> и не пустая ("") с выбрасыванием исключения.</summary>
 		/// <param name="value">Строка для проверки.</param>
 		/// <param name="paramName">Название параметра указанной строки (используйте <see cref="nameof()"/>).</param>

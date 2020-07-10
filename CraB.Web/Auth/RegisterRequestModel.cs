@@ -23,6 +23,6 @@ namespace CraB.Web
 		[DataType(DataType.Password)]
 		[Display(Name = "Confirm password")]
 		[Compare("Password", ErrorMessage = "Пароль и подтверждение пароля не совпадают.")]
-		public string ConfirmPassword { get; set; }
+		public string PasswordConfirm { get; set; }
 	}
 }
