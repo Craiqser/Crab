@@ -1,33 +1,37 @@
-﻿using System;
+﻿using Microsoft.Extensions.Configuration;
+using System;
+using System.Reflection;
 
 namespace CraB.Core
 {
-	/// <summary>Класс доступа к настройкам через текущего провайдера настроек конфигурации.</summary>
+	/// <summary>Класс доступа к настройкам с маппингом классов.</summary>
 	public static class Config
 	{
-		private static IConfigurationRepository _configurationRepository;
+		private static IConfiguration _configuration;
 
-		private static IConfigurationRepository Repository
+		private static IConfiguration Configuration
 		{
 			get
 			{
-				_configurationRepository ??= Dependencies.Resolve<IConfigurationRepository>();
-				return _configurationRepository;
+				_configuration ??= Dependencies.Resolve<IConfiguration>();
+				return _configuration;
 			}
 		}
 
-		/// <summary>Возвращает настройки конфигурации для указанного типа настройки. Если настройка не найдена, возвращает новый экземпляр объекта.</summary>
-		/// <param name="settingType">Тип настройки.</param>
-		public static object Get(Type type)
+		/// <summary>Загружает конфигурацию в класс указанного типа.</summary>
+		/// <param name="type">Тип класса (необязательный) или тип для чтения атрибута <see cref="SettingKeyAttribute"/>.</param>
+		/// <returns>Созданный объект класса данного типа с загруженными настройками.</returns>
+		/// <exception cref="ArgumentNullException" />
+		public static T Get<T>(Type type = null) where T : class, new()
 		{
-			return Repository.Load(type);
-		}
+			Type typeT = type ?? typeof(T);
+			SettingKeyAttribute keyAttribute = typeT.GetCustomAttribute<SettingKeyAttribute>();
+			string key = (keyAttribute == null) ? typeT.Name : keyAttribute.SettingKey;
 
-		/// <summary>Возвращает настройки конфигурации для указанного типа настройки. Если настройка не найдена, возвращает новый экземпляр объекта.</summary>
-		/// <typeparam name="T">Тип настройки.</typeparam>
-		public static T Get<T>() where T : class, new()
-		{
-			return (T)Get(typeof(T));
+			T instance = new T();
+			Configuration.Bind(key, instance);
+
+			return instance;
 		}
 	}
 }
