@@ -1,5 +1,7 @@
-﻿using Microsoft.Data.SqlClient;
+﻿using CraB.Core;
 using System;
+using System.Collections.Generic;
+using System.Reflection;
 
 namespace CraB.Debug
 {
@@ -7,9 +9,9 @@ namespace CraB.Debug
 	{
 		static void Main()
 		{
-			using SqlConnection connection = new SqlConnection("Integrated Security=SSPI;Persist Security Info=False;Initial Catalog=Work;Data Source=.;MultipleActiveResultSets=true");
+			List<Assembly> assemblies = AssembliesHelper.Assemblies;
 
-
+			Console.WriteLine(assemblies.Count);
 			Console.ReadKey();
 		}
 	}
