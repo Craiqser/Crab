@@ -9,7 +9,12 @@ namespace CraB.Sql
 	{
 		public static string DefaultConnectionKey { get; set; } = "Default";
 
-		public static async Task<int> Insert<T>(T value, string connectionKey = null) where T : class
+		/// <summary>Асинхронно вставляет <typeparamref name="T"/> в таблицу "Ts" (или указанную в <see cref="TableAttribute"/>) и возвращает идентификатор вставленной записи.</summary>
+		/// <typeparam name="T"></typeparam>
+		/// <param name="value">Класс объекта.</param>
+		/// <param name="connectionKey">Ключ соединения (по умолчанию <c>Default</c>).</param>
+		/// <returns></returns>
+		public static async Task<int> InsertAsync<T>(T value, string connectionKey = null) where T : class
 		{
 			using IDbConnection connection = Connections.New(connectionKey ?? DefaultConnectionKey);
 			return await connection.InsertAsync(value).ConfigureAwait(false);

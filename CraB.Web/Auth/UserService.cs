@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace CraB.Web
 {
-	public class UserService<TUser> where TUser : IAuthUser
+	public class UserService<TUser> where TUser : class, IAuthUser
 	{
 		private static string AuthenticationTicket(string userName)
 		{
@@ -62,11 +62,17 @@ namespace CraB.Web
 			}
 
 			Throttler throttler = new Throttler($"{CachePrefix.User}{loginRequestModel.UserName.ToUpperInvariant()}", TimeSpan.FromMinutes(15), 5);
-			TUser user;
+			TUser user = null;
 
 			if (loginRequestModel.Password.NullOrEmpty() || ((user = await GetAsync(loginRequestModel.UserName).ConfigureAwait(false)) == null) || (user.Active != DeleteOffActive.Active))
 			{
+				if ((user != null) && user.Active == DeleteOffActive.Off)
+				{
+					loginFailedModel.Error = "Аккаунт не активирован.";
+				}
+
 				_ = throttler.Check();
+
 				return loginFailedModel;
 			}
 
