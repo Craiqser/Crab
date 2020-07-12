@@ -9,7 +9,6 @@ namespace CraB.Core
 	public static class AssembliesHelper
 	{
 		private const string assemblyPrefix = "CraB";
-
 		private static List<Assembly> _assemblies = new List<Assembly>();
 
 		/// <summary>Получает сборки проекта.</summary>
