@@ -21,7 +21,6 @@ namespace CraB.Core
 		/// <summary>Загружает конфигурацию в класс указанного типа.</summary>
 		/// <param name="type">Тип класса (необязательный) или тип для чтения атрибута <see cref="SettingKeyAttribute"/>.</param>
 		/// <returns>Созданный объект класса данного типа с загруженными настройками.</returns>
-		/// <exception cref="ArgumentNullException" />
 		public static T Get<T>(Type type = null) where T : class, new()
 		{
 			Type typeT = type ?? typeof(T);

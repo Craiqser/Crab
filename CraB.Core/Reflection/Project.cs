@@ -6,7 +6,7 @@ using System.Reflection;
 namespace CraB.Core
 {
 	/// <summary>Содержит вспомогательные функции для работы с ассемблерными сборками.</summary>
-	public static class AssembliesHelper
+	public static class Project
 	{
 		private const string assemblyPrefix = "CraB";
 		private static List<Assembly> _assemblies = new List<Assembly>();
@@ -86,6 +86,16 @@ namespace CraB.Core
 			}
 
 			return (T)attributes.First();
+		}
+
+		/// <summary>Добавление пользовательской сборки.</summary>
+		/// <param name="assembly">Сборка.</param>
+		public static void AssemblyAdd(Assembly assembly)
+		{
+			if (!_assemblies.Contains(assembly))
+			{
+				_assemblies.Add(assembly);
+			}
 		}
 
 		/// <summary>Получает типы интерфейса.</summary>
