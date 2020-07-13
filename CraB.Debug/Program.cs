@@ -9,7 +9,7 @@ namespace CraB.Debug
 	{
 		static void Main()
 		{
-			List<Assembly> assemblies = AssembliesHelper.Assemblies;
+			List<Assembly> assemblies = Project.Assemblies;
 
 			Console.WriteLine(assemblies.Count);
 			Console.ReadKey();
