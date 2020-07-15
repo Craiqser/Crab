@@ -16,6 +16,7 @@
 
 	<ItemGroup>
 		<ProjectReference Include="..\CraB.Sql\CraB.Sql.csproj" />
+		<ProjectReference Include="..\CraB.Web\CraB.Web.csproj" />
 	</ItemGroup>
 
 </Project>

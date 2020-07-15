@@ -92,7 +92,7 @@ namespace CraB.Core
 		/// <param name="assembly">Сборка.</param>
 		public static void AssemblyAdd(Assembly assembly)
 		{
-			if (!_assemblies.Contains(assembly))
+			if (!Assemblies.Contains(assembly))
 			{
 				_assemblies.Add(assembly);
 			}

@@ -1,7 +1,6 @@
 ﻿using CraB.Core;
+using CraB.Web;
 using System;
-using System.Collections.Generic;
-using System.Reflection;
 
 namespace CraB.Debug
 {
@@ -9,9 +8,12 @@ namespace CraB.Debug
 	{
 		static void Main()
 		{
-			List<Assembly> assemblies = Project.Assemblies;
+			Project.AssemblyAdd(typeof(IAuthUser).Assembly);
 
-			Console.WriteLine(assemblies.Count);
+			ILocalizationService localizationService = new LocalizationService();
+			localizationService.RegisterLocalizationAttribute();
+
+			//Console.WriteLine();
 			Console.ReadKey();
 		}
 	}
