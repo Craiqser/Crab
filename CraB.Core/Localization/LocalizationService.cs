@@ -36,6 +36,19 @@ namespace CraB.Core
 			_resources[new Key(languageId, key)] = text;
 		}
 
+		/// <summary>Получает все ключи без учёта культуры.</summary>
+		public HashSet<string> Keys()
+		{
+			HashSet<string> result = new HashSet<string>(StringComparer.Ordinal);
+
+			foreach (Key searchKey in _resources.Keys)
+			{
+				_ = result.Add(searchKey.Item2);
+			}
+
+			return result;
+		}
+
 		/// <summary>Возвращает значение для указанного ключа, или сам ключ, если значение не найдено.</summary>
 		/// <param name="languageId">Культура (например 'en-US', 'ru-RU').</param>
 		/// <param name="key">Ключ (например, Enums.Month.June).</param>
@@ -105,19 +118,6 @@ namespace CraB.Core
 			}
 
 			return resources;
-		}
-
-		/// <summary>Получает все ключи без учёта культуры.</summary>
-		public HashSet<string> Keys()
-		{
-			HashSet<string> result = new HashSet<string>(StringComparer.Ordinal);
-
-			foreach (Key searchKey in _resources.Keys)
-			{
-				_ = result.Add(searchKey.Item2);
-			}
-
-			return result;
 		}
 	}
 }

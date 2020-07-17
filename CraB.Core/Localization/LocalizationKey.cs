@@ -3,17 +3,17 @@
 namespace CraB.Core
 {
 	/// <summary>Определяет ресурс локализации. Содержит ключ и неявные преобразования в строку и из строки.</summary>
-	public class KeyValue
+	public class LocalizationKey
 	{
+		/// <summary>Пустой экземпляр класса.</summary>
+		private static readonly LocalizationKey Empty = string.Empty;
+
 		/// <summary>Ключ.</summary>
 		public string Key { get; }
 
-		/// <summary>Пустой текстовый экземпляр.</summary>
-		public static readonly KeyValue Empty = string.Empty;
-
 		/// <summary>Создаёт новый экземпляр с заданным ключём.</summary>
 		/// <param name="key">Ключ.</param>
-		public KeyValue(string key)
+		public LocalizationKey(string key)
 		{
 			Key = key;
 		}
@@ -36,24 +36,24 @@ namespace CraB.Core
 			return Get(Key);
 		}
 
-		/// <summary>Неявное преобразование в строку, которое возвращает ресурс ключа, или сам ключ, если ресурс ключа не найден.</summary>
-		public static implicit operator string(KeyValue keyValue)
+		/// <summary>Неявное преобразование в строку.</summary>
+		public static implicit operator string(LocalizationKey keyValue)
 		{
 			return (keyValue == null) ? null : Get(keyValue.Key);
 		}
 
-		/// <summary>Создаёт новый экземпляр класса <see cref="KeyValue" /> с заданным текстовым ключём.</summary>
-		/// <param name="key">Текстовый ключ.</param>
-		public static KeyValue ToKeyValue(string key)
+		/// <summary>Неявное преобразование из строки, которое создаёт новый экземпляр класса <see cref="LocalizationKey" /> с заданным ключём.</summary>
+		/// <param name="key">Ключ.</param>
+		public static LocalizationKey ToLocalizationKey(string key)
 		{
-			return key.NullOrEmpty() ? Empty : new KeyValue(key);
+			return key.NullOrEmpty() ? Empty : new LocalizationKey(key);
 		}
 
-		/// <summary>Неявное преобразование из строки, которое создаёт новый экземпляр класса <see cref="KeyValue" /> с заданным текстовым ключём.</summary>
-		/// <param name="key">Текстовый ключ.</param>
-		public static implicit operator KeyValue(string key)
+		/// <summary>Неявное преобразование из строки, которое создаёт новый экземпляр класса <see cref="LocalizationKey" /> с заданным ключём.</summary>
+		/// <param name="key">Ключ.</param>
+		public static implicit operator LocalizationKey(string key)
 		{
-			return ToKeyValue(key);
+			return ToLocalizationKey(key);
 		}
 	}
 }

@@ -52,9 +52,9 @@ namespace CraB.Web
 				{ return await GetByUserNameAsync(userName).ConfigureAwait(false); }).ConfigureAwait(false);
 		}
 
-		public async Task<LoginResponseModel> LoginAsync(LoginRequestModel loginRequestModel)
+		public async Task<T> LoginAsync<T>(LoginRequestModel loginRequestModel) where T : ILoginResponseModel, new()
 		{
-			LoginResponseModel loginFailedModel = new LoginResponseModel { Successful = false, Error = "Login and password are invalid." };
+			T loginFailedModel = new T { Successful = false, ErrorDescr = "Login and password are invalid." };
 
 			if ((loginRequestModel == null) || loginRequestModel.UserName.TrimmedEmpty())
 			{
@@ -68,7 +68,7 @@ namespace CraB.Web
 			{
 				if ((user != null) && user.Active == DeleteOffActive.Off)
 				{
-					loginFailedModel.Error = "Аккаунт не активирован.";
+					loginFailedModel.ErrorDescr = "Аккаунт не активирован.";
 				}
 
 				_ = throttler.Check();
@@ -79,7 +79,7 @@ namespace CraB.Web
 			if (Generator.ComputeSHA512(loginRequestModel.Password, user.PasswordSalt) == user.PasswordHash)
 			{
 				throttler.Reset();
-				return new LoginResponseModel { Successful = true, Token = AuthenticationTicket(user.UserName) };
+				return new T { Successful = true, Token = AuthenticationTicket(user.UserName) };
 			}
 
 			_ = throttler.Check();
