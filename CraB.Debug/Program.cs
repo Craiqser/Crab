@@ -11,13 +11,15 @@ namespace CraB.Debug
 		{
 			Project.AssemblyAdd(typeof(IAuthUser).Assembly);
 
-			Console.WriteLine($"CurrentCulture is {CultureInfo.CurrentCulture.Name}.");
+			string langId = "ru";
+
+			Console.WriteLine($"CurrentCulture is {CultureHelper.LangId(langId)}.");
 
 			ILocalizationService localizationService = new LocalizationService();
 			localizationService.RegisterLocalizationAttribute();
 
 			//Console.WriteLine();
-			Console.ReadKey();
+			_ = Console.ReadKey();
 		}
 	}
 }
