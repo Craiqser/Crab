@@ -54,7 +54,7 @@ namespace CraB.Web
 
 		public async Task<T> LoginAsync<T>(LoginRequestModel loginRequestModel) where T : ILoginResponseModel, new()
 		{
-			T loginFailedModel = new T { Successful = false, ErrorDescr = "Login and password are invalid." };
+			T loginFailedModel = new T { Successful = false, ErrorDescr = "User:Auth:LoginPassInvalid" };
 
 			if ((loginRequestModel == null) || loginRequestModel.UserName.TrimmedEmpty())
 			{
@@ -68,7 +68,7 @@ namespace CraB.Web
 			{
 				if ((user != null) && user.Active == DeleteOffActive.Off)
 				{
-					loginFailedModel.ErrorDescr = "Аккаунт не активирован.";
+					loginFailedModel.ErrorDescr = "User:Auth:AccountNotActivated";
 				}
 
 				_ = throttler.Check();
@@ -91,7 +91,7 @@ namespace CraB.Web
 		/// <param name="registerRequestModel">Анкета пользователя.</param>
 		public async Task<RegisterResponseModel> RegisterAsync(RegisterRequestModel registerRequestModel)
 		{
-			RegisterResponseModel registerFailedModel = new RegisterResponseModel { Successful = false, Error = "Registration model is null." };
+			RegisterResponseModel registerFailedModel = new RegisterResponseModel { Successful = false, Error = "User:Auth:RegistrationError" };
 
 			if (registerRequestModel == null)
 			{
@@ -105,13 +105,13 @@ namespace CraB.Web
 
 			if (registerRequestModel.UserName.Length < 3 || registerRequestModel.UserName.Length > 20)
 			{
-				registerFailedModel.Error = "'Login' must be between 3 and 20 characters.";
+				registerFailedModel.Error = "User:Auth:LoginLength";
 			}
 			else
 			{
 				foreach (char c in registerRequestModel.UserName)
 				{
-					registerFailedModel.Error = "Недопустимый символ в поле 'Login'.";
+					registerFailedModel.Error = "User:Auth:LoginCharInvalid";
 
 					if (!c.LoginChar())
 					{
@@ -122,19 +122,19 @@ namespace CraB.Web
 
 			if (await GetAsync(registerRequestModel.UserName).ConfigureAwait(false) != null)
 			{
-				registerFailedModel.Error = "Provided login already in use.";
+				registerFailedModel.Error = "User:Auth:LoginInUse";
 			}
 			else if ((registerRequestModel.Email.Length > 0) && !registerRequestModel.Email.EmailValid())
 			{
-				registerFailedModel.Error = "Invalid email.";
+				registerFailedModel.Error = "User:Auth:EmailInvalid";
 			}
 			else if (registerRequestModel.Password.Length < 6)
 			{
-				registerFailedModel.Error = "Поле 'Password' должно быть не менее 6 символов.";
+				registerFailedModel.Error = "User:Auth:PasswordLength";
 			}
 			else if (registerRequestModel.Password != registerRequestModel.PasswordConfirm)
 			{
-				registerFailedModel.Error = "Поля 'Пароль' и 'Подтверждение пароля' не совпадают.";
+				registerFailedModel.Error = "User:Auth:PasswordConfirm";
 			}
 			else
 			{

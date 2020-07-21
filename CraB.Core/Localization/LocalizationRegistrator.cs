@@ -41,7 +41,7 @@ namespace CraB.Core
 
 					if (attr != null)
 					{
-						localizationService.LocalizationAttributeAdd(type, attr.LanguageId ?? string.Empty, attr.Prefix ?? string.Empty);
+						localizationService.LocalizationAttributeAdd(type, attr.LanguageId ?? string.Empty, attr.KeyPrefix ?? string.Empty);
 					}
 				}
 			}

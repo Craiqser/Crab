@@ -12,7 +12,7 @@ namespace CraB.Core
 		public string LanguageId { get; set; } = string.Empty;
 
 		/// <summary>Префикс ключа.</summary>
-		public string Prefix { get; set; } = string.Empty;
+		public string KeyPrefix { get; set; } = string.Empty;
 
 		/// <summary>Инициализирует новый экземпляр класса <see cref="LocalizationAttribute" />.</summary>
 		public LocalizationAttribute()
