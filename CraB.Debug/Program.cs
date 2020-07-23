@@ -1,7 +1,6 @@
 ﻿using CraB.Core;
 using CraB.Web;
 using System;
-using System.Globalization;
 
 namespace CraB.Debug
 {
@@ -15,10 +14,9 @@ namespace CraB.Debug
 
 			Console.WriteLine($"CurrentCulture is {CultureHelper.LangId(langId)}.");
 
-			ILocalizationService localizationService = new LocalizationService();
-			localizationService.RegisterLocalizationAttribute();
-
+			// ILocalizationService localizationService = LocalizationRegistrator.LocalizationService;
 			//Console.WriteLine();
+
 			_ = Console.ReadKey();
 		}
 	}
