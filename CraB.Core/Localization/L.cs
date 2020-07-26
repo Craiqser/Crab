@@ -1,10 +1,26 @@
 ﻿using System.Globalization;
+using System.Text.RegularExpressions;
 
 namespace CraB.Core
 {
 	/// <summary>Получает локализованное представление ключа.</summary>
 	public class L
 	{
+		/// <summary>Возвращает постфикс ключа и приводит строку к нормализованному виду.</summary>
+		/// <remarks>Например, если ключ равен "User:Auth:AppLogin", то метод вернёт "App Login".</remarks>
+		/// <param name="key">Ключ.</param>
+		private static string KeyPostfix(string key)
+		{
+			int idx = key.LastIndexOf(':');
+
+			if (idx > 0)
+			{
+				key = key.SubstringSafe(++idx, key.Length);
+			}
+
+			return Regex.Replace(key, "((?<=[a-z])[A-Z]|[A-Z](?=[a-z]))", " $1", RegexOptions.Compiled).Trim();
+		}
+
 		/// <summary>Пустой экземпляр.</summary>
 		public static readonly L Empty = new L(string.Empty);
 
@@ -28,15 +44,16 @@ namespace CraB.Core
 				return null;
 			}
 
-			ILocalizationService localizationService = LocalizationRegistrator.LocalizationService;
-			return localizationService?.Value(langId ?? CultureInfo.CurrentUICulture.Name, key);
+			return LocalizationRegistrator.LocalizationService?.Value(langId ?? CultureInfo.CurrentUICulture.Name, key);
 		}
 
 		/// <summary>Возвращает локализованное представление ключа, или сам ключ, если ресурс не найден.</summary>
 		/// <param name="key">Ключ.</param>
 		public static string Get(string key)
 		{
-			return GetTry(key) ?? key;
+			key.NotNull(nameof(key));
+
+			return GetTry(key) ?? KeyPostfix(key);
 		}
 
 		/// <summary>Возвращает локализованное представление ключа для указанной культуры, или сам ключ, если ресурс не найден.</summary>
@@ -44,7 +61,9 @@ namespace CraB.Core
 		/// <param name="langId">Культура.</param>
 		public static string Get(string key, string langId)
 		{
-			return GetTry(key, langId) ?? key;
+			key.NotNull(nameof(key));
+
+			return GetTry(key, langId) ?? KeyPostfix(key);
 		}
 
 		/// <summary>Преобразование класса в строку, соответствующую ключу, либо сам ключ, если ресурс не найден.</summary>

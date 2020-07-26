@@ -1,5 +1,6 @@
 ﻿using CraB.Core;
 using CraB.Web;
+using Microsoft.Extensions.DependencyInjection;
 using System;
 
 namespace CraB.Debug
@@ -10,12 +11,13 @@ namespace CraB.Debug
 		{
 			Project.AssemblyAdd(typeof(IAuthUser).Assembly);
 
-			string langId = "ru";
+			// Настройка локализации для тестирования.
+			ServiceCollection services = new ServiceCollection();
+			services.AddSingleton<ILocalizationService, LocalizationService>();
+			IServiceProvider provider = services.BuildServiceProvider();
+			Dependencies.ServiceProviderSet(provider);
 
-			Console.WriteLine($"CurrentCulture is {CultureHelper.LangId(langId)}.");
-
-			// ILocalizationService localizationService = LocalizationRegistrator.LocalizationService;
-			//Console.WriteLine();
+			Console.WriteLine(L.Get("User:Auth:AppLogin"));
 
 			_ = Console.ReadKey();
 		}
