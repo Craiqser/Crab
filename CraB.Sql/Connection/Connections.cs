@@ -29,15 +29,26 @@ namespace CraB.Sql
 
 				connectionString = configuration.GetConnectionString(key);
 
-				if (connectionString == null)
+				if (connectionString != null)
 				{
-					return null;
+					connections.Add(key, connectionString);
 				}
-
-				connections.Add(key, connectionString);
 			}
 
 			return connectionString;
+		}
+
+		/// <summary>Добавляет в словарь строку соединения с указанным ключом.</summary>
+		/// <param name="key">Ключ.</param>
+		/// <param name="value">Строка соединения.</param>
+		public static void Add(string key, string value)
+		{
+			if (connections.ContainsKey(key))
+			{
+				throw new InvalidOperationException($"Ключ соединения с именем '{key}' уже добавлен.");
+			}
+
+			connections.Add(key, value);
 		}
 
 		/// <summary>Создает новое соединение для указанного ключа соединения.</summary>
@@ -62,6 +73,15 @@ namespace CraB.Sql
 			}
 
 			return New(attr.ConnectionKey);
+		}
+
+		/// <summary>Возвращает ключ соединения из атрибута <see cref="ConnectionKeyAttribute" /> для указанного типа класса.</summary>
+		/// <typeparam name="T">Тип указанного класса.</typeparam>
+		/// <returns>Ключ соединения или <c>null</c>.</returns>
+		public static string Key<T>() where T : class
+		{
+			ConnectionKeyAttribute attr = typeof(T).GetCustomAttribute<ConnectionKeyAttribute>();
+			return attr?.ConnectionKey;
 		}
 	}
 }

@@ -101,14 +101,14 @@ namespace CraB.Core
 				if (key.EndsWith(":", StringComparison.Ordinal))
 				{
 					descriptionAttribute = member.GetCustomAttribute<DescriptionAttribute>();
-					localizationService.Add(languageId, $"Permission:{key}", descriptionAttribute != null ? descriptionAttribute.Description : member.Name);
+					localizationService.Add(languageId, $"{CachePrefix.Permission}{key}", descriptionAttribute != null ? descriptionAttribute.Description : member.Name);
 
 					continue;
 				}
 
 				thisKeys.Add(key);
 				descriptionAttribute = member.GetCustomAttribute<DescriptionAttribute>();
-				localizationService.Add(languageId, $"Permission:{key}", descriptionAttribute != null ? descriptionAttribute.Description : member.Name);
+				localizationService.Add(languageId, $"{CachePrefix.Permission}{key}", descriptionAttribute != null ? descriptionAttribute.Description : member.Name);
 			}
 
 			if (thisKeys.Count > 0)
@@ -119,7 +119,7 @@ namespace CraB.Core
 				if ((displayName != null) && (lastColonIndex > 0) && (lastColonIndex < thisKeys[0].Length - 1)
 					&& thisKeys.TrueForAll(x => x.LastIndexOf(":", StringComparison.Ordinal) == lastColonIndex))
 				{
-					localizationService.Add(languageId, $"Permission:{thisKeys[0].Substring(0, lastColonIndex + 1)}", displayName.DisplayName);
+					localizationService.Add(languageId, $"{CachePrefix.Permission}{thisKeys[0].Substring(0, lastColonIndex + 1)}", displayName.DisplayName);
 				}
 			}
 
@@ -156,7 +156,7 @@ namespace CraB.Core
 
 							if (descriptionAttribute != null)
 							{
-								localizationService.Add(languageId, $"Enums:{enumKey}:{name}", descriptionAttribute.Description);
+								localizationService.Add(languageId, $"{CachePrefix.Enum}{enumKey}:{name}", descriptionAttribute.Description);
 							}
 						}
 					}
