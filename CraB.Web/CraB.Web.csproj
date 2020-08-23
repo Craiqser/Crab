@@ -1,7 +1,6 @@
 <Project Sdk="Microsoft.NET.Sdk">
-
 	<PropertyGroup>
-		<TargetFrameworks>netstandard2.1;netcoreapp3.1</TargetFrameworks>
+		<TargetFramework>net5.0</TargetFramework>
 		<Authors>Craiqser</Authors>
 		<PackageLicenseExpression>MIT</PackageLicenseExpression>
 		<RepositoryType>Git</RepositoryType>
@@ -23,5 +22,4 @@
 		<ProjectReference Include="..\CraB.Core\CraB.Core.csproj" />
 		<ProjectReference Include="..\CraB.Sql\CraB.Sql.csproj" />
 	</ItemGroup>
-
 </Project>

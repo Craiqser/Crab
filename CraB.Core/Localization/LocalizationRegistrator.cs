@@ -20,7 +20,6 @@ namespace CraB.Core
 					_localizationService.NotNull(nameof(_localizationService));
 
 					_localizationService.RegisterAttributes();
-					_localizationService.RegisterPermissions();
 					_localizationService.RegisterEnums();
 				}
 
@@ -60,72 +59,6 @@ namespace CraB.Core
 					object value = fieldInfo.GetValue(null) ?? fieldInfo.Name;
 					localizationService.Add(languageId, $"{prefix}:{fieldInfo.Name}", value.ToString());
 				}
-			}
-		}
-
-		/// <summary>Получает ключи и локализации разрешений из вложенных классов, помеченных атрибутом <see cref="PermissionKeyAttribute" />.</summary>
-		private static void RegisterPermissions(this ILocalizationService localizationService)
-		{
-			foreach (Assembly assembly in Project.Assemblies)
-			{
-				foreach (Type type in assembly.GetTypes())
-				{
-					PermissionKeyAttribute attr = type.GetCustomAttribute<PermissionKeyAttribute>();
-
-					if (attr != null)
-					{
-						localizationService.PermissionAdd(type, attr.LanguageId ?? string.Empty);
-					}
-				}
-			}
-		}
-
-		private static void PermissionAdd(this ILocalizationService localizationService, Type type, string languageId)
-		{
-			List<string> thisKeys = new List<string>();
-
-			foreach (FieldInfo member in type.GetFields(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Static | BindingFlags.DeclaredOnly))
-			{
-				if (member.FieldType != typeof(string))
-				{
-					continue;
-				}
-
-				if (!(member.GetValue(null) is string key))
-				{
-					continue;
-				}
-
-				DescriptionAttribute descriptionAttribute;
-
-				if (key.EndsWith(":", StringComparison.Ordinal))
-				{
-					descriptionAttribute = member.GetCustomAttribute<DescriptionAttribute>();
-					localizationService.Add(languageId, $"{CachePrefix.Permission}{key}", descriptionAttribute != null ? descriptionAttribute.Description : member.Name);
-
-					continue;
-				}
-
-				thisKeys.Add(key);
-				descriptionAttribute = member.GetCustomAttribute<DescriptionAttribute>();
-				localizationService.Add(languageId, $"{CachePrefix.Permission}{key}", descriptionAttribute != null ? descriptionAttribute.Description : member.Name);
-			}
-
-			if (thisKeys.Count > 0)
-			{
-				DisplayNameAttribute displayName = type.GetCustomAttribute<DisplayNameAttribute>();
-				int lastColonIndex = thisKeys[0].LastIndexOf(":", StringComparison.Ordinal);
-
-				if ((displayName != null) && (lastColonIndex > 0) && (lastColonIndex < thisKeys[0].Length - 1)
-					&& thisKeys.TrueForAll(x => x.LastIndexOf(":", StringComparison.Ordinal) == lastColonIndex))
-				{
-					localizationService.Add(languageId, $"{CachePrefix.Permission}{thisKeys[0].Substring(0, lastColonIndex + 1)}", displayName.DisplayName);
-				}
-			}
-
-			foreach (Type nested in type.GetNestedTypes(BindingFlags.Public | BindingFlags.DeclaredOnly))
-			{
-				localizationService.PermissionAdd(nested, languageId);
 			}
 		}
 
