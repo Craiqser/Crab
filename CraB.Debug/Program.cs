@@ -26,7 +26,7 @@ namespace CraB.Debug
 			*/
 
 			// Тестирование запросов Dapper.
-			Connections.Add("Work", "Integrated Security=SSPI;Persist Security Info=False;Initial Catalog=Work;Data Source=.;MultipleActiveResultSets=true");
+			Connects.Add("Work", "Integrated Security=SSPI;Persist Security Info=False;Initial Catalog=Work;Data Source=.;MultipleActiveResultSets=true");
 			List<DataAreaTest> companies;
 			string sql = "select t.ID, t.[NAME] from dbo.DATAAREA as t with(nolock) where (t.ISVIRTUAL = 0);";
 			companies = Query.Select<DataAreaTest>(sql).ToList();

@@ -9,7 +9,7 @@ using System.Reflection;
 namespace CraB.Sql
 {
 	/// <summary>Содержит функции, связанные с подключением к базе данных.</summary>
-	public static class Connections
+	public static class Connects
 	{
 		private static readonly Dictionary<string, string> connections = new Dictionary<string, string>();
 

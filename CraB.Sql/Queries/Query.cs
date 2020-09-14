@@ -18,7 +18,7 @@ namespace CraB.Sql
 		/// <returns></returns>
 		public static async Task<int> InsertAsync<T>(T value, string connectionKey = null) where T : class
 		{
-			using IDbConnection connection = Connections.New(connectionKey ?? DefaultConnectionKey);
+			using IDbConnection connection = Connects.New(connectionKey ?? DefaultConnectionKey);
 			return await connection.InsertAsync(value).ConfigureAwait(false);
 		}
 
@@ -30,7 +30,7 @@ namespace CraB.Sql
 		/// <returns><typeparamref name="T" /></returns>
 		public static T SingleOrDefault<T>(string sql, object param = null, string connectionKey = null) where T : class
 		{
-			using IDbConnection connection = Connections.New(connectionKey ?? DefaultConnectionKey);
+			using IDbConnection connection = Connects.New(connectionKey ?? DefaultConnectionKey);
 			return connection.QuerySingleOrDefault<T>(sql, param);
 		}
 
@@ -42,7 +42,7 @@ namespace CraB.Sql
 		/// <returns><typeparamref name="T" /></returns>
 		public static async Task<T> SingleOrDefaultAsync<T>(string sql, object param = null, string connectionKey = null) where T : class
 		{
-			using IDbConnection connection = Connections.New(connectionKey ?? DefaultConnectionKey);
+			using IDbConnection connection = Connects.New(connectionKey ?? DefaultConnectionKey);
 			return await connection.QuerySingleOrDefaultAsync<T>(sql, param).ConfigureAwait(false);
 		}
 
@@ -53,8 +53,8 @@ namespace CraB.Sql
 		/// <param name="connectionKey">Ключ конфигурации строки соединения.</param>
 		public static IEnumerable<T> Select<T>(string sql, object param = null, string connectionKey = null) where T : class
 		{
-			connectionKey ??= Connections.Key<T>();
-			using IDbConnection connection = Connections.New(connectionKey ?? DefaultConnectionKey);
+			connectionKey ??= Connects.Key<T>();
+			using IDbConnection connection = Connects.New(connectionKey ?? DefaultConnectionKey);
 
 			return connection.Query<T>(sql, param);
 		}
@@ -66,8 +66,8 @@ namespace CraB.Sql
 		/// <param name="connectionKey">Ключ конфигурации строки соединения.</param>
 		public static async Task<IEnumerable<T>> SelectAsync<T>(string sql, object param = null, string connectionKey = null) where T : class
 		{
-			connectionKey ??= Connections.Key<T>();
-			using IDbConnection connection = Connections.New(connectionKey ?? DefaultConnectionKey);
+			connectionKey ??= Connects.Key<T>();
+			using IDbConnection connection = Connects.New(connectionKey ?? DefaultConnectionKey);
 
 			return await connection.QueryAsync<T>(sql, param).ConfigureAwait(false);
 		}

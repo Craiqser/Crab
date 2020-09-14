@@ -8,6 +8,8 @@
 		<PackageTags>Craiqser;CraB</PackageTags>
 		<Description>Craiqser Base library part.</Description>
 		<Copyright>Copyright © Craiqser</Copyright>
+		<EnableNETAnalyzers>true</EnableNETAnalyzers>
+		<AnalysisLevel>latest</AnalysisLevel>
 	</PropertyGroup>
 
 	<ItemGroup>
