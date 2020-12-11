@@ -1,12 +1,12 @@
 ﻿using CraB.Core;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
-using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
 using System.Text;
+using System.Text.Json;
 
 namespace CraB.Web
 {
@@ -28,7 +28,7 @@ namespace CraB.Web
 
 			List<Claim> claims = new List<Claim>();
 			string tokenClaims = Encoding.UTF8.GetString(Base64Parse(jwtClaims.Split('.')[1]));
-			Dictionary<string, object> keyValuePairs = JsonConvert.DeserializeObject<Dictionary<string, object>>(tokenClaims);
+			Dictionary<string, object> keyValuePairs = JsonSerializer.Deserialize<Dictionary<string, object>>(tokenClaims);
 			claims.AddRange(keyValuePairs.Select(kvp => new Claim(kvp.Key, kvp.Value.ToString())));
 
 			return claims;
