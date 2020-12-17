@@ -1,2 +1,3 @@
 # CraB
-Craiqser Base library.
+
+Projects base library.
