@@ -10,8 +10,6 @@ namespace CraB.Sql
 		/// <exception cref="ArgumentNullException" />
 		public static IDbConnection EnsureOpen(this IDbConnection connection)
 		{
-			connection.NotNull(nameof(connection));
-
 			if (connection.State != ConnectionState.Open)
 			{
 				connection.Open();

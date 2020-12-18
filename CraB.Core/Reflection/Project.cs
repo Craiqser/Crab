@@ -71,8 +71,6 @@ namespace CraB.Core
 		/// <exception cref="InvalidOperationException"></exception>
 		public static T AttributeGet<T>(this MemberInfo memberInfo, bool inherit = false) where T : Attribute
 		{
-			memberInfo.NotNull(nameof(memberInfo));
-
 			object[] attributes = memberInfo.GetCustomAttributes(typeof(T), inherit);
 
 			if (!attributes.Any())

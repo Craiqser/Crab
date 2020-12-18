@@ -13,8 +13,6 @@ namespace CraB.Core
 		/// <param name="values">Значения.</param>
 		public static void AddRange<T>(this ICollection<T> list, params T[] values)
 		{
-			list.NotNull(nameof(list));
-
 			foreach (T value in values)
 			{
 				list.Add(value);
@@ -27,9 +25,6 @@ namespace CraB.Core
 		/// <param name="values">Значения.</param>
 		public static void AddRange<T>(this ICollection<T> list, IEnumerable<T> values)
 		{
-			list.NotNull(nameof(list));
-			values.NotNull(nameof(values));
-
 			foreach (T value in values)
 			{
 				list.Add(value);
@@ -42,9 +37,6 @@ namespace CraB.Core
 		/// <param name="itemAction">Действие над элементом.</param>
 		public static void ForEach<T>(this IEnumerable<T> itemsEnumerable, Action<T> itemAction)
 		{
-			itemsEnumerable.NotNull(nameof(itemsEnumerable));
-			itemAction.NotNull(nameof(itemAction));
-
 			foreach (T item in itemsEnumerable)
 			{
 				itemAction(item);
@@ -59,8 +51,6 @@ namespace CraB.Core
 		/// <returns>Значение указанного ключа или значение по умолчанию для TValue, если ключ не найден.</returns>
 		public static TValue Get<TKey, TValue>(this IDictionary<TKey, TValue> dictionary, TKey key)
 		{
-			dictionary.NotNull(nameof(dictionary));
-
 			return !dictionary.TryGetValue(key, out TValue value) ? default : value;
 		}
 
@@ -73,8 +63,6 @@ namespace CraB.Core
 		/// <returns>Значение указанного ключа или переданное значение по умолчанию, если ключ не найден.</returns>
 		public static TValue Get<TKey, TValue>(this IDictionary<TKey, TValue> dictionary, TKey key, TValue defaultValue)
 		{
-			dictionary.NotNull(nameof(dictionary));
-
 			return !dictionary.TryGetValue(key, out TValue value) ? defaultValue : value;
 		}
 

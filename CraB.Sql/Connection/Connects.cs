@@ -67,12 +67,9 @@ namespace CraB.Sql
 		{
 			ConnectionKeyAttribute attr = typeof(T).GetCustomAttribute<ConnectionKeyAttribute>();
 
-			if (attr == null)
-			{
-				throw new ArgumentOutOfRangeException($"Тип {typeof(T).FullName} не имеет атрибута ConnectionKey.");
-			}
-
-			return New(attr.ConnectionKey);
+			return attr == null
+				? throw new ArgumentOutOfRangeException($"Тип {typeof(T).FullName} не имеет атрибута ConnectionKey.")
+				: New(attr.ConnectionKey);
 		}
 
 		/// <summary>Возвращает ключ соединения из атрибута <see cref="ConnectionKeyAttribute" /> для указанного типа класса.</summary>

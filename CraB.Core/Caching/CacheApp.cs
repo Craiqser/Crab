@@ -36,8 +36,6 @@ namespace CraB.Core
 		{
 			if (!_cache.TryGetValue(key, out TItem value)) // Если не нашли, то создаём.
 			{
-				valueNew.NotNull(nameof(valueNew));
-
 				value = valueNew(); // Получаем новый элемент и применяем настройки.
 				MemoryCacheEntryOptions valueOptions = memoryCacheEntryOptions ?? _memoryCacheEntryOptionsPreset;
 				_ = _cache.Set(key, value, valueOptions);
@@ -69,8 +67,6 @@ namespace CraB.Core
 		/// <returns>Кэшируемое значение указанного ключа.</returns>
 		public static TItem Value<TItem>(string key, TimeSpan expiration, Func<TItem> valueNew)
 		{
-			valueNew.NotNull(nameof(valueNew));
-
 			return Value(key, expiration, valueNew());
 		}
 
@@ -101,15 +97,13 @@ namespace CraB.Core
 			if (!_cache.TryGetValue(key, out TItem value)) // Если не нашли, то создаём (проверяем, не создаётся ли в другом потоке).
 			{
 				SemaphoreSlim locked = _locks.GetOrAdd(key, semaphore => new SemaphoreSlim(1, 1));
-				await locked.WaitAsync().ConfigureAwait(false);
+				await locked.WaitAsync();
 
 				try
 				{
 					if (!_cache.TryGetValue(key, out value))
 					{
-						valueNew.NotNull(nameof(valueNew));
-
-						value = await valueNew().ConfigureAwait(false); // Получаем новый элемент и применяем настройки.
+						value = await valueNew(); // Получаем новый элемент и применяем настройки.
 						MemoryCacheEntryOptions valueOptions = memoryCacheEntryOptions ?? _memoryCacheEntryOptionsPreset;
 						_ = _cache.Set(key, value, valueOptions);
 					}

@@ -26,8 +26,6 @@ namespace CraB.Core
 		/// <returns><see cref="Tuple"/>&lt;Hash, Salt></returns>
 		public static Tuple<string, string> ComputeSHA512(string value, bool useSalt = true, string salt = "")
 		{
-			value.NotNullOrEmpty(nameof(value));
-
 			if (useSalt)
 			{
 				if (salt.TrimmedEmpty())

@@ -54,8 +54,6 @@ namespace CraB.Core
 		/// <param name="key">Ключ (например, Enums.Month.June).</param>
 		public string Value(string languageId, string key)
 		{
-			languageId.NotNull(nameof(languageId));
-
 			Key searchKey = new Key(languageId, key);
 
 			if (!_resources.TryGetValue(searchKey, out string value))
@@ -88,8 +86,6 @@ namespace CraB.Core
 		/// <returns>Словарь ключей и значений для указанной культуры.</returns>
 		public Dictionary<string, string> Values(string languageId)
 		{
-			languageId.NotNull(nameof(languageId));
-
 			Dictionary<string, string> resources = new Dictionary<string, string>();
 
 			while (languageId.Length > 0)

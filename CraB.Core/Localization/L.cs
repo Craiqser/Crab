@@ -39,20 +39,15 @@ namespace CraB.Core
 		/// <param name="langId">Культура.</param>
 		public static string GetTry(string key, string langId = null)
 		{
-			if (key.NullOrEmpty())
-			{
-				return null;
-			}
-
-			return LocalizationRegistrator.LocalizationService?.Value(langId ?? CultureInfo.CurrentUICulture.Name, key);
+			return key.NullOrEmpty()
+				? null
+				: (LocalizationRegistrator.LocalizationService?.Value(langId ?? CultureInfo.CurrentUICulture.Name, key));
 		}
 
 		/// <summary>Возвращает локализованное представление ключа, или сам ключ, если ресурс не найден.</summary>
 		/// <param name="key">Ключ.</param>
 		public static string Get(string key)
 		{
-			key.NotNull(nameof(key));
-
 			return GetTry(key) ?? KeyPostfix(key);
 		}
 
@@ -61,8 +56,6 @@ namespace CraB.Core
 		/// <param name="langId">Культура.</param>
 		public static string Get(string key, string langId)
 		{
-			key.NotNull(nameof(key));
-
 			return GetTry(key, langId) ?? KeyPostfix(key);
 		}
 

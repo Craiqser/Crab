@@ -34,9 +34,6 @@ namespace CraB.Core
 		/// <param name="throwOnExists">Если установлен в <c>true</c>, выбрасывает исключение циклической зависимости.</param>
 		public static IEnumerable<T> Sort<T>(IEnumerable<T> source, Func<T, IEnumerable<T>> dependencies, bool throwOnExists = false)
 		{
-			source.NotNull(nameof(source));
-			dependencies.NotNull(nameof(dependencies));
-
 			List<T> sorted = new List<T>();
 			HashSet<T> visited = new HashSet<T>();
 

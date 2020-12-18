@@ -24,8 +24,6 @@ namespace CraB.Web
 
 		public static IEnumerable<Claim> ParseClaimsFromJwt(string jwtClaims)
 		{
-			jwtClaims.NotNull(nameof(jwtClaims));
-
 			List<Claim> claims = new List<Claim>();
 			string tokenClaims = Encoding.UTF8.GetString(Base64Parse(jwtClaims.Split('.')[1]));
 			Dictionary<string, object> keyValuePairs = JsonSerializer.Deserialize<Dictionary<string, object>>(tokenClaims);
@@ -59,8 +57,6 @@ namespace CraB.Web
 		/// <returns><see cref="JwtSettings" /></returns>
 		public static JwtSettings FromConfiguration(IConfiguration configuration)
 		{
-			configuration.NotNull(nameof(configuration));
-
 			string audience = configuration["Jwt:Audience"] ?? "CraB.Auth.Audience"; // Для получателя в конфиге установить домен приложения.
 			int expDays = Convert.ToInt32(configuration["Jwt:ExpiryDays"], Invariant.NumberFormat);
 			string issuer = configuration["Jwt:Issuer"] ?? "CraB.Auth.Issuer"; // Для издателя в конфиге установить домен сервера с API аутентификации.

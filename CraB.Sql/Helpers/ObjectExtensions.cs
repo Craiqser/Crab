@@ -22,8 +22,6 @@ namespace CraB.Sql
 		/// <param name="valueName">Наименование проверяемого значения.</param>
 		internal static void NotNullOrEmpty(this object[] value, string valueName)
 		{
-			value.NotNull(valueName);
-
 			if (value.Length == 0)
 			{
 				throw new ArgumentOutOfRangeException($"'{valueName}' не может быть пустым массивом.", valueName);

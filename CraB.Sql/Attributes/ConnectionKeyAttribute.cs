@@ -25,8 +25,6 @@ namespace CraB.Sql
 		/// <exception cref="ArgumentOutOfRangeException" />
 		public ConnectionKeyAttribute(Type connectionKeySourceType)
 		{
-			connectionKeySourceType.NotNull(nameof(connectionKeySourceType));
-
 			ConnectionKeyAttribute attr = connectionKeySourceType.GetCustomAttribute<ConnectionKeyAttribute>(true) ??
 				throw new ArgumentOutOfRangeException(nameof(connectionKeySourceType), $"Атрибут '{GetType().Name}' задан через тип {connectionKeySourceType.Name}, который его не имеет.");
 
