@@ -18,7 +18,7 @@ namespace CraB.Web
 		public const string AuthType = "Jwt";
 
 		public string Audience { get; }
-		public int ExpiryDays { get; }
+		public int ExpiryMinutes { get; }
 		public string Issuer { get; }
 		public SecurityKey Key { get; }
 
@@ -43,10 +43,10 @@ namespace CraB.Web
 			return Convert.FromBase64String(base64);
 		}
 
-		public JwtSettings(string audience, int expiryDays, string issuer, SecurityKey key)
+		public JwtSettings(string audience, int expiryMinutes, string issuer, SecurityKey key)
 		{
 			Audience = audience;
-			ExpiryDays = expiryDays;
+			ExpiryMinutes = expiryMinutes;
 			Issuer = issuer;
 			Key = key;
 		}
@@ -58,11 +58,11 @@ namespace CraB.Web
 		public static JwtSettings FromConfiguration(IConfiguration configuration)
 		{
 			string audience = configuration["Jwt:Audience"] ?? "CraB.Auth.Audience"; // Для получателя в конфиге установить домен приложения.
-			int expDays = Convert.ToInt32(configuration["Jwt:ExpiryDays"], Invariant.NumberFormat);
+			int expiryMinutes = Convert.ToInt32(configuration["Jwt:ExpiryMinutes"], Invariant.NumberFormat);
 			string issuer = configuration["Jwt:Issuer"] ?? "CraB.Auth.Issuer"; // Для издателя в конфиге установить домен сервера с API аутентификации.
 			SymmetricSecurityKey key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["Jwt:SecurityKey"] ?? "CraB.Auth.SecurityKey"));
 
-			return new JwtSettings(audience, expDays == 0 ? 5 : expDays, issuer, key);
+			return new JwtSettings(audience, expiryMinutes == 0 ? 60 : expiryMinutes, issuer, key);
 		}
 
 		public TokenValidationParameters TokenValidationParameters => new TokenValidationParameters

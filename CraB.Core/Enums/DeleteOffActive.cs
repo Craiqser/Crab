@@ -7,9 +7,9 @@
 		Delete = -1,
 
 		/// <summary>Выключен.</summary>
-		Off,
+		Off = 0,
 
 		/// <summary>Активен.</summary>
-		Active
+		Active = 1
 	}
 }

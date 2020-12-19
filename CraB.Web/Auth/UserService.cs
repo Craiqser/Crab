@@ -22,7 +22,7 @@ namespace CraB.Web
 				issuer: jwtSettings.Issuer,
 				audience: jwtSettings.Audience,
 				claims: userClaims,
-				expires: DateTime.Now.AddDays(jwtSettings.ExpiryDays),
+				expires: DateTime.Now.AddMinutes(jwtSettings.ExpiryMinutes),
 				signingCredentials: signingCredentials
 			);
 
@@ -79,7 +79,7 @@ namespace CraB.Web
 			if (Generator.ComputeSHA512(loginRequestModel.Password, user.PasswordSalt) == user.PasswordHash)
 			{
 				throttler.Reset();
-				return new T { Successful = true, Token = AuthenticationTicket(user.UserName) };
+				return new T { Successful = true, Token = AuthenticationTicket(user.Login) };
 			}
 
 			_ = throttler.Check();
@@ -105,13 +105,13 @@ namespace CraB.Web
 
 			if (registerRequestModel.UserName.Length < 3 || registerRequestModel.UserName.Length > 20)
 			{
-				registerFailedModel.Error = "User:Auth:LoginLength";
+				registerFailedModel.Error = "User.Auth.LoginLength";
 			}
 			else
 			{
 				foreach (char c in registerRequestModel.UserName)
 				{
-					registerFailedModel.Error = "User:Auth:LoginCharInvalid";
+					registerFailedModel.Error = "User.Auth.LoginCharInvalid";
 
 					if (!c.LoginChar())
 					{
@@ -122,19 +122,19 @@ namespace CraB.Web
 
 			if (await GetAsync(registerRequestModel.UserName).ConfigureAwait(false) != null)
 			{
-				registerFailedModel.Error = "User:Auth:LoginInUse";
+				registerFailedModel.Error = "User.Auth.LoginInUse";
 			}
 			else if ((registerRequestModel.Email.Length > 0) && !registerRequestModel.Email.EmailValid())
 			{
-				registerFailedModel.Error = "User:Auth:EmailInvalid";
+				registerFailedModel.Error = "User.Auth.EmailInvalid";
 			}
 			else if (registerRequestModel.Password.Length < 6)
 			{
-				registerFailedModel.Error = "User:Auth:PasswordLength";
+				registerFailedModel.Error = "User.Auth.PasswordLength";
 			}
 			else if (registerRequestModel.Password != registerRequestModel.PasswordConfirm)
 			{
-				registerFailedModel.Error = "User:Auth:PasswordConfirm";
+				registerFailedModel.Error = "User.Auth.PasswordConfirm";
 			}
 			else
 			{
