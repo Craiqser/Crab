@@ -1,6 +1,6 @@
 ﻿namespace CraB.Web
 {
-	public class RegisterResponseModel
+	public class RegisterResponse
 	{
 		public bool Successful { get; set; }
 		public string Error { get; set; }

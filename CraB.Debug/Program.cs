@@ -25,6 +25,7 @@ namespace CraB.Debug
 			Console.WriteLine(L.Get("User:Auth:AppLogin"));
 			*/
 
+			/*
 			// Тестирование запросов Dapper.
 			Connects.Add("Work", "Integrated Security=SSPI;Persist Security Info=False;Initial Catalog=Work;Data Source=.;MultipleActiveResultSets=true");
 			List<DataAreaTest> companies;
@@ -35,6 +36,10 @@ namespace CraB.Debug
 			{
 				Console.WriteLine($"{c.Id} - {c.Name}");
 			}
+			*/
+
+			TimeSpan duration = TimeSpan.FromMinutes(5);
+			Console.WriteLine($"{duration.TotalSeconds}");
 
 			_ = Console.ReadKey();
 		}

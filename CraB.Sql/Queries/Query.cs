@@ -18,7 +18,7 @@ namespace CraB.Sql
 		public static async Task<int> InsertAsync<T>(T value, string connectionKey = null) where T : class
 		{
 			using IDbConnection connection = Connects.New(connectionKey ?? DefaultConnectionKey);
-			return await connection.InsertAsync(value).ConfigureAwait(false);
+			return await connection.InsertAsync(value);
 		}
 
 		/// <summary>Выполняет запрос, возвращающий одну запись, иначе возвращает значение по-умолчанию для заданного типа.</summary>
@@ -42,7 +42,7 @@ namespace CraB.Sql
 		public static async Task<T> SingleOrDefaultAsync<T>(string sql, object param = null, string connectionKey = null) where T : class
 		{
 			using IDbConnection connection = Connects.New(connectionKey ?? DefaultConnectionKey);
-			return await connection.QuerySingleOrDefaultAsync<T>(sql, param).ConfigureAwait(false);
+			return await connection.QuerySingleOrDefaultAsync<T>(sql, param);
 		}
 
 		/// <summary>Выполняет запрос <c>select</c>, возвращающий все записи.</summary>
@@ -68,7 +68,7 @@ namespace CraB.Sql
 			connectionKey ??= Connects.Key<T>();
 			using IDbConnection connection = Connects.New(connectionKey ?? DefaultConnectionKey);
 
-			return await connection.QueryAsync<T>(sql, param).ConfigureAwait(false);
+			return await connection.QueryAsync<T>(sql, param);
 		}
 	}
 }

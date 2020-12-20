@@ -14,7 +14,7 @@ namespace CraB.Web
 	public class JwtSettings
 	{
 		public const string AuthScheme = "Bearer";
-		public const string AuthTokenKeyName = "AuthNToken";
+		public const string AuthTokenKeyName = "uta";
 		public const string AuthType = "Jwt";
 
 		public string Audience { get; }

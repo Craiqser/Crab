@@ -2,19 +2,20 @@
 
 namespace CraB.Web
 {
-	public class RegisterRequestModel
+	/// <summary>Модель данных для регистрации пользователя в системе.</summary>
+	public class RegisterRequest
 	{
-		[Required(ErrorMessage = "Поле 'Login' должно быть заполнено.")]
+		[Required(ErrorMessage = "Auth.Login.Required")]
 		[DataType(DataType.Text), MinLength(3), MaxLength(20)]
 		[Display(Name = "Login")]
-		public string UserName { get; set; }
+		public string Login { get; set; }
 
-		[Required(ErrorMessage = "Поле 'Email' должно быть заполнено.")]
+		[Required(ErrorMessage = "Auth.Email.Required")]
 		[EmailAddress]
 		[Display(Name = "Email")]
 		public string Email { get; set; }
 
-		[Required(ErrorMessage = "Поле 'Password' должно быть заполнено.")]
+		[Required(ErrorMessage = "Auth.Password.Required")]
 		[StringLength(100, ErrorMessage = "Длина поля {0} должна быть от {2} до {1} символов.", MinimumLength = 6)]
 		[DataType(DataType.Password)]
 		[Display(Name = "Password")]
@@ -22,7 +23,7 @@ namespace CraB.Web
 
 		[DataType(DataType.Password)]
 		[Display(Name = "Confirm password")]
-		[Compare("Password", ErrorMessage = "Пароль и подтверждение пароля не совпадают.")]
+		[Compare("Password", ErrorMessage = "Auth.Password.CompareNot")]
 		public string PasswordConfirm { get; set; }
 	}
 }
