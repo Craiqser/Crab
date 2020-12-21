@@ -1,107 +1,107 @@
 ﻿using CraB.Core;
 using CraB.Core.Helpers;
 using CraB.Sql;
-using Microsoft.IdentityModel.Tokens;
 using System;
 using System.Collections.Generic;
-using System.IdentityModel.Tokens.Jwt;
-using System.Security.Claims;
+using System.Linq;
+using System.Security.Cryptography;
 using System.Threading.Tasks;
 
 namespace CraB.Web.Auth.Server
 {
-	public class UserService<T> where T: class, IUserAuth
+	public class UserService<T> where T : class, IUser
 	{
-		private static string AuthenticationTicket(string userName)
+		private static Dictionary<string, UserInfoOnline> Tokens { get; } = new();
+
+		private static UserInfoOnline AuthenticationTicket(UserAuth userAuth)
 		{
-			List<Claim> userClaims = new List<Claim> { new Claim(ClaimTypes.Name, userName) };
+			foreach (var token in Tokens.Where(t => t.Value.Id == userAuth.Id).ToList())
+			{
+				Tokens.Remove(token.Key);
+			}
 
 			JwtSettings jwtSettings = Dependencies.Resolve<JwtSettings>();
-			SigningCredentials signingCredentials = new SigningCredentials(jwtSettings.Key, SecurityAlgorithms.HmacSha256);
-			JwtSecurityToken token = new JwtSecurityToken(
-				issuer: jwtSettings.Issuer,
-				audience: jwtSettings.Audience,
-				claims: userClaims,
-				expires: DateTime.Now.AddMinutes(jwtSettings.ExpiryMinutes),
-				signingCredentials: signingCredentials
-			);
+			string tokenOnline = TokenOnline();
+			UserInfoOnline userInfoOnline = new UserInfoOnline
+			{
+				ExpiresAt = DateTime.UtcNow.AddMinutes(jwtSettings.ExpiryMinutes),
+				Id = userAuth.Id,
+				Login = userAuth.Login,
+				SecurityKeys = new Dictionary<string, string>(),
+				Token = tokenOnline
+			};
+			Tokens.Add(tokenOnline, userInfoOnline);
 
-			return new JwtSecurityTokenHandler().WriteToken(token);
+			return userInfoOnline;
 		}
 
-		private static T GetByUserName(string login)
+		private static T GetByLogin(string login)
 		{
-			string sql = "select t.* from dbo.Users as t with(nolock) where (t.Login = @Login);";
+			string sql = "select top 1 t.* from dbo.Users as t with(nolock) where (t.[Login] = @Login);";
 			return Query.SingleOrDefault<T>(sql, new { Login = login });
 		}
 
-		private static async Task<T> GetByUserNameAsync(string login)
+		private static async Task<T> GetByLoginAsync(string login)
 		{
-			string sql = "select t.* from dbo.Users as t with(nolock) where (t.Login = @Login);";
+			string sql = "select top 1 t.* from dbo.Users as t with(nolock) where (t.[Login] = @Login);";
 			return await Query.SingleOrDefaultAsync<T>(sql, new { Login = login });
 		}
 
-		public T Get(string userName, int expirationMin = 5)
+		/// <summary>Генерация токена онлайн-пользователя.</summary>
+		private static string TokenOnline()
 		{
-			return CacheApp.Value($"{CachePrefix.User}{userName}", TimeSpan.FromMinutes(expirationMin), () => GetByUserName(userName));
+			byte[] randomNumber = new byte[32];
+			using RandomNumberGenerator rng = RandomNumberGenerator.Create();
+			rng.GetBytes(randomNumber);
+
+			return Convert.ToBase64String(randomNumber);
 		}
 
-		public async Task<T> GetAsync(string userName, int expirationMin = 5)
+		public T Get(string login, int expirationMin = 10)
 		{
-			return await CacheApp.Value($"{CachePrefix.User}{userName}", TimeSpan.FromMinutes(expirationMin),
-				async () => await GetByUserNameAsync(userName));
+			return CacheApp.Value($"{CachePrefix.User}{login}", TimeSpan.FromMinutes(expirationMin), () => GetByLogin(login));
 		}
 
+		public async Task<T> GetAsync(string login, int expirationMin = 10)
+		{
+			return await CacheApp.Value($"{CachePrefix.User}{login}", TimeSpan.FromMinutes(expirationMin), async () => await GetByLoginAsync(login));
+		}
+
+		public async Task<UserAuth> GetUserAuthAsync(string login)
+		{
+			string sql = @"select t.Id, t.[Login], t.PasswordHash, t.PasswordSalt, t.Active from dbo.Users as t with(nolock) where (t.[Login] = @Login);";
+			return await Query.SingleOrDefaultAsync<UserAuth>(sql, new { Login = login });
+		}
+
+		/// <summary>Обработка входа пользователя в систему.</summary>
+		/// <param name="loginRequest">Содержит логин и пароль пользователя.</param>
 		public async Task<LoginResponse> LoginAsync(LoginRequest loginRequest)
 		{
-			if ((loginRequest is null) || loginRequest.Login.TrimmedEmpty())
+			Throttler throttler = new Throttler($"{CachePrefix.User}{loginRequest.Login.ToLowerInvariant()}", TimeSpan.FromMinutes(15), 5);
+
+			if ((loginRequest is null)
+				|| loginRequest.Login.TrimmedEmpty()
+				|| !throttler.Check())
 			{
 				return new LoginResponse { ErrorKey = "User.Auth.LoginPassInvalid" };
 			}
 
-			Throttler throttler = new Throttler($"{CachePrefix.User}{loginRequest.Login.ToUpperInvariant()}", TimeSpan.FromMinutes(15), 5);
-			T user = null;
+			UserAuth userAuth = null;
 
-			if (loginRequest.Password.NullOrEmpty() || ((user = await GetAsync(loginRequest.Login)) is null) || (user.Active != DeleteOffActive.Active))
+			if (loginRequest.Password.NullOrEmpty()
+				|| ((userAuth = await GetUserAuthAsync(loginRequest.Login)) is null)
+				|| (userAuth.Active != DeleteOffActive.Active))
 			{
-				LoginResponse loginResponse;
-
-				if ((user is not null) && user.Active == DeleteOffActive.Off)
-				{
-					loginResponse = new LoginResponse { ErrorKey = "User.Auth.AccountNotActivated" };
-				}
-				else
-				{
-					loginResponse = new LoginResponse { ErrorKey = "User.Auth.LoginPassInvalid" };
-				}
-
-				_ = throttler.Check();
-
-				return loginResponse;
+				return (userAuth is not null) && (userAuth.Active == DeleteOffActive.Off)
+					? new LoginResponse { ErrorKey = "User.Auth.AccountNotActivated" }
+					: new LoginResponse { ErrorKey = "User.Auth.LoginPassInvalid" };
 			}
 
-			if (Generator.ComputeSHA512(loginRequest.Password, user.PasswordSalt) == user.PasswordHash)
+			if (Generator.ComputeSHA512(loginRequest.Password, userAuth.PasswordSalt) == userAuth.PasswordHash)
 			{
 				throttler.Reset();
-
-				LoginResponse loginResponse = new LoginResponse();
-				/*
-				LoginResponse loginResponse = new LoginResponse
-				{
-					UserPayload = new IUserPayload
-					{
-						ExpiresMin = 15,
-						Name = user.Login,
-						TokenAccess = AuthenticationTicket(user.Login),
-						TokenRefresh = ""
-					}
-				};
-				*/
-
-				return loginResponse;
+				return new LoginResponse { UserInfo = AuthenticationTicket(userAuth) };
 			}
-
-			_ = throttler.Check();
 
 			return new LoginResponse { ErrorKey = "User.Auth.LoginPassInvalid" };
 		}

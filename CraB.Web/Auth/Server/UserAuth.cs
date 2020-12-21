@@ -2,11 +2,14 @@
 
 namespace CraB.Web.Auth.Server
 {
-	/// <summary>Интерфейс данных пользователя для встроенной аутентификации на сервере.</summary>
-	public interface IUserAuth
+	/// <summary>Данные пользователя для встроенной аутентификации на сервере.</summary>
+	public class UserAuth
 	{
 		/// <summary>Активность пользователя (-1 - удалён; 0 - выключен; 1 - активен).</summary>
 		public DeleteOffActive Active { get; init; }
+
+		/// <summary>Идентификатор пользователя.</summary>
+		public int Id { get; init; }
 
 		/// <summary>Уникальное имя пользователя - логин.</summary>
 		public string Login { get; init; }

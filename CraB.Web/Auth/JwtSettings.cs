@@ -14,8 +14,9 @@ namespace CraB.Web
 	public class JwtSettings
 	{
 		public const string AuthScheme = "Bearer";
-		public const string AuthTokenKeyName = "uta";
 		public const string AuthType = "Jwt";
+		public const string UserTokenAccess = "uta";
+		public const string UserTokenRefresh = "utr";
 
 		public string Audience { get; }
 		public int ExpiryMinutes { get; }
@@ -53,16 +54,16 @@ namespace CraB.Web
 
 		/// <summary>Загружает секцию конфигурационных настроек Jwt в класс <see cref="JwtSettings" />.</summary>
 		/// <param name="configuration"></param>
-		/// <remarks>"Jwt": {"Audience": "https://localhost", "Issuer": "https://localhost", "SecurityKey": "Test security key"}</remarks>
+		/// <remarks>"Jwt": {"Audience": "https://localhost", "ExpiryMinutes": 15, "Issuer": "https://localhost", "SecurityKey": "YourVeryLongSecurityKey"}</remarks>
 		/// <returns><see cref="JwtSettings" /></returns>
 		public static JwtSettings FromConfiguration(IConfiguration configuration)
 		{
 			string audience = configuration["Jwt:Audience"] ?? "CraB.Auth.Audience"; // Для получателя в конфиге установить домен приложения.
 			int expiryMinutes = Convert.ToInt32(configuration["Jwt:ExpiryMinutes"], Invariant.NumberFormat);
 			string issuer = configuration["Jwt:Issuer"] ?? "CraB.Auth.Issuer"; // Для издателя в конфиге установить домен сервера с API аутентификации.
-			SymmetricSecurityKey key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["Jwt:SecurityKey"] ?? "CraB.Auth.SecurityKey"));
+			SymmetricSecurityKey key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["Jwt:SecurityKey"]));
 
-			return new JwtSettings(audience, expiryMinutes == 0 ? 60 : expiryMinutes, issuer, key);
+			return new JwtSettings(audience, expiryMinutes == 0 ? 15 : expiryMinutes, issuer, key);
 		}
 
 		public TokenValidationParameters TokenValidationParameters => new TokenValidationParameters

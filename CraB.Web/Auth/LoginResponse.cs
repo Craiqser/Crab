@@ -6,9 +6,10 @@
 		/// <summary>Ключ ошибки.</summary>
 		public string ErrorKey { get; init; }
 
-		public bool Successful => UserPayload is not null;
+		/// <summary><c>True</c>, если аутентификация прошла успешно, иначе <c>false</c>.</summary>
+		public bool Successful => UserInfo is not null;
 
 		/// <summary>Данные пользователя.</summary>
-		public IUserPayload UserPayload { get; init; }
+		public UserInfoOnline UserInfo { get; init; }
 	}
 }

@@ -8,7 +8,7 @@ namespace CraB.Sql
 {
 	public static class Query
 	{
-		public static string DefaultConnectionKey { get; set; } = "Default";
+		public static string DefaultConnectionKey { get; } = "App";
 
 		/// <summary>Асинхронно вставляет <typeparamref name="T"/> в таблицу "Ts" (или указанную в <see cref="TableAttribute"/>) и возвращает идентификатор вставленной записи.</summary>
 		/// <typeparam name="T"></typeparam>
