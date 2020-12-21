@@ -14,9 +14,5 @@ namespace CraB.Web.Auth.Client
 		/// <summary>Регистрация пользователя в системе.</summary>
 		/// <param name="registerRequest"></param>
 		Task<RegisterResponse> Register(RegisterRequest registerRequest);
-
-		/// <summary>Обновление токена.</summary>
-		/// <returns>Токен доступа.</returns>
-		Task<string> TokenRefresh();
 	}
 }
