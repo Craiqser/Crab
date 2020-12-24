@@ -110,11 +110,9 @@ namespace CraB.Web.Auth.Server
 		/// <param name="registerRequestModel">Анкета пользователя.</param>
 		public async Task<RegisterResponse> RegisterAsync(RegisterRequest registerRequest)
 		{
-			RegisterResponse registerFailedModel = new RegisterResponse { Successful = false, Error = "User:Auth:RegistrationError" };
-
 			if (registerRequest is null)
 			{
-				return registerFailedModel;
+				return new RegisterResponse { Successful = false, ErrorKey = "User.Auth.RegistrationError" };
 			}
 
 			registerRequest.Login = registerRequest.Login.TrimToEmpty();
@@ -124,43 +122,37 @@ namespace CraB.Web.Auth.Server
 
 			if (registerRequest.Login.Length < 3 || registerRequest.Login.Length > 20)
 			{
-				registerFailedModel.Error = "User.Auth.LoginLength";
+				return new RegisterResponse { Successful = false, ErrorKey = "User.Auth.LoginLength" };
 			}
 			else
 			{
 				foreach (char c in registerRequest.Login)
 				{
-					registerFailedModel.Error = "User.Auth.LoginCharInvalid";
-
 					if (!c.LoginChar())
 					{
-						return registerFailedModel;
+						return new RegisterResponse { Successful = false, ErrorKey = "User.Auth.LoginCharInvalid" };
 					}
 				}
 			}
 
 			if (await GetAsync(registerRequest.Login) != null)
 			{
-				registerFailedModel.Error = "User.Auth.LoginInUse";
+				return new RegisterResponse { Successful = false, ErrorKey = "User.Auth.LoginInUse" };
 			}
 			else if ((registerRequest.Email.Length > 0) && !registerRequest.Email.EmailValid())
 			{
-				registerFailedModel.Error = "User.Auth.EmailInvalid";
+				return new RegisterResponse { Successful = false, ErrorKey = "User.Auth.EmailInvalid" };
 			}
 			else if (registerRequest.Password.Length < 6)
 			{
-				registerFailedModel.Error = "User.Auth.PasswordLength";
+				return new RegisterResponse { Successful = false, ErrorKey = "User.Auth.PasswordLength" };
 			}
 			else if (registerRequest.Password != registerRequest.PasswordConfirm)
 			{
-				registerFailedModel.Error = "User.Auth.PasswordConfirm";
-			}
-			else
-			{
-				return new RegisterResponse { Successful = true, Error = string.Empty };
+				return new RegisterResponse { Successful = false, ErrorKey = "User.Auth.PasswordConfirm" };
 			}
 
-			return registerFailedModel;
+			return new RegisterResponse { Successful = true };
 		}
 	}
 }
