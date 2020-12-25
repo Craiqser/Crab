@@ -23,8 +23,8 @@ namespace CraB.Core
 		/// <param name="value">Хэшируемая строка.</param>
 		/// <param name="useSalt">Использовать соль для создания хэша.</param>
 		/// <param name="salt">Соль.</param>
-		/// <returns><see cref="Tuple"/>&lt;Hash, Salt></returns>
-		public static Tuple<string, string> ComputeSHA512(string value, bool useSalt = true, string salt = "")
+		/// <returns>&lt;Hash, Salt></returns>
+		public static (string, string) ComputeSHA512(string value, bool useSalt = true, string salt = "")
 		{
 			if (useSalt)
 			{
@@ -45,7 +45,7 @@ namespace CraB.Core
 				buffer = sha512.ComputeHash(buffer);
 			}
 
-			return new Tuple<string, string>(Convert.ToBase64String(buffer).Substring(0, 86), salt);
+			return (Convert.ToBase64String(buffer).Substring(0, 86), salt);
 		}
 
 		/// <summary>Генерирует хэш длиной 86 символов для указанной строки, используя алгоритм <see cref="SHA512"/>.</summary>
@@ -54,8 +54,8 @@ namespace CraB.Core
 		/// <returns>Хэш.</returns>
 		public static string ComputeSHA512(string value, string salt)
 		{
-			Tuple<string, string> result = ComputeSHA512(value, true, salt);
-			return result.Item1;
+			(string hash, _) = ComputeSHA512(value, true, salt);
+			return hash;
 		}
 	}
 }

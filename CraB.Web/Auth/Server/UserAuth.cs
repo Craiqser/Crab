@@ -3,7 +3,7 @@
 namespace CraB.Web.Auth.Server
 {
 	/// <summary>Данные пользователя для встроенной аутентификации на сервере.</summary>
-	public class UserAuth
+	public class UserAuth : IUser
 	{
 		/// <summary>Активность пользователя (-1 - удалён; 0 - выключен; 1 - активен).</summary>
 		public DeleteOffActive Active { get; init; }

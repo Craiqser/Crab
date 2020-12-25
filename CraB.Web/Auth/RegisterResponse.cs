@@ -6,6 +6,6 @@
 		public string ErrorKey { get; init; }
 
 		/// <summary><c>True</c>, если регистрация прошла успешно, иначе <c>false</c>.</summary>
-		public bool Successful { get; set; }
+		public bool Successful => string.IsNullOrEmpty(ErrorKey);
 	}
 }

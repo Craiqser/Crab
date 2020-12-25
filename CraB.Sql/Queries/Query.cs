@@ -11,9 +11,9 @@ namespace CraB.Sql
 		public static string DefaultConnectionKey { get; } = "App";
 
 		/// <summary>Асинхронно вставляет <typeparamref name="T"/> в таблицу "Ts" (или указанную в <see cref="TableAttribute"/>) и возвращает идентификатор вставленной записи.</summary>
-		/// <typeparam name="T"></typeparam>
+		/// <typeparam name="T">Тип объекта запроса.</typeparam>
 		/// <param name="value">Класс объекта.</param>
-		/// <param name="connectionKey">Ключ соединения (по умолчанию <c>Default</c>).</param>
+		/// <param name="connectionKey">Ключ соединения (по умолчанию <c>App</c>).</param>
 		/// <returns></returns>
 		public static async Task<int> InsertAsync<T>(T value, string connectionKey = null) where T : class
 		{

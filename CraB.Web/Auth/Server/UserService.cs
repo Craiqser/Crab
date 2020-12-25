@@ -112,7 +112,7 @@ namespace CraB.Web.Auth.Server
 		{
 			if (registerRequest is null)
 			{
-				return new RegisterResponse { Successful = false, ErrorKey = "User.Auth.RegistrationError" };
+				return new RegisterResponse { ErrorKey = "User.Auth.RegistrationError" };
 			}
 
 			registerRequest.Login = registerRequest.Login.TrimToEmpty();
@@ -122,7 +122,7 @@ namespace CraB.Web.Auth.Server
 
 			if (registerRequest.Login.Length < 3 || registerRequest.Login.Length > 20)
 			{
-				return new RegisterResponse { Successful = false, ErrorKey = "User.Auth.LoginLength" };
+				return new RegisterResponse { ErrorKey = "User.Auth.LoginLength" };
 			}
 			else
 			{
@@ -130,29 +130,29 @@ namespace CraB.Web.Auth.Server
 				{
 					if (!c.LoginChar())
 					{
-						return new RegisterResponse { Successful = false, ErrorKey = "User.Auth.LoginCharInvalid" };
+						return new RegisterResponse { ErrorKey = "User.Auth.LoginCharInvalid" };
 					}
 				}
 			}
 
 			if (await GetAsync(registerRequest.Login) != null)
 			{
-				return new RegisterResponse { Successful = false, ErrorKey = "User.Auth.LoginInUse" };
+				return new RegisterResponse { ErrorKey = "User.Auth.LoginInUse" };
 			}
 			else if ((registerRequest.Email.Length > 0) && !registerRequest.Email.EmailValid())
 			{
-				return new RegisterResponse { Successful = false, ErrorKey = "User.Auth.EmailInvalid" };
+				return new RegisterResponse { ErrorKey = "User.Auth.EmailInvalid" };
 			}
 			else if (registerRequest.Password.Length < 6)
 			{
-				return new RegisterResponse { Successful = false, ErrorKey = "User.Auth.PasswordLength" };
+				return new RegisterResponse { ErrorKey = "User.Auth.PasswordLength" };
 			}
 			else if (registerRequest.Password != registerRequest.PasswordConfirm)
 			{
-				return new RegisterResponse { Successful = false, ErrorKey = "User.Auth.PasswordConfirm" };
+				return new RegisterResponse { ErrorKey = "User.Auth.PasswordConfirm" };
 			}
 
-			return new RegisterResponse { Successful = true };
+			return new RegisterResponse();
 		}
 	}
 }
