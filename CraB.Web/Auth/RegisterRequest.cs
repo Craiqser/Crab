@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
 
 namespace CraB.Web
 {
@@ -25,5 +26,9 @@ namespace CraB.Web
 		[Display(Name = "Confirm password")]
 		[Compare("Password", ErrorMessage = "Auth.Password.CompareNot")]
 		public string PasswordConfirm { get; set; }
+
+		[Required, DefaultValue("en-US")]
+		[DataType(DataType.Text), MinLength(2), MaxLength(7)]
+		public string LangId { get; set; }
 	}
 }

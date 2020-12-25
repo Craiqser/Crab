@@ -55,7 +55,7 @@ namespace CraB.Core
 		/// <exception cref="ArgumentNullException(string?)" />
 		internal static void NotNull(this string value, string paramName)
 		{
-			if (value == null)
+			if (value is null)
 			{
 				throw new ArgumentNullException(paramName);
 			}
@@ -68,7 +68,7 @@ namespace CraB.Core
 		/// <exception cref="ArgumentOutOfRangeException(string?, string?)" />
 		internal static void NotNullOrEmpty(this string value, string paramName)
 		{
-			if (value == null)
+			if (value is null)
 			{
 				throw new ArgumentNullException(paramName);
 			}
@@ -133,14 +133,14 @@ namespace CraB.Core
 		{
 			if (value.NullOrEmpty())
 			{
-				return string.Empty;
+				return "";
 			}
 
 			int len = value.Length;
 
 			return (startIndex >= len) || (maxLength <= 0)
-				? string.Empty
-				: ((startIndex + maxLength) > len) ? value.Substring(startIndex) : value.Substring(startIndex, maxLength);
+				? ""
+				: ((startIndex + maxLength) > len) ? value[startIndex..] : value.Substring(startIndex, maxLength);
 		}
 
 		/// <summary>Проверяет, действительно ли строка имеет значение <c>null</c>, является пустой ("") или содержащей только пробельные символы.</summary>
@@ -159,7 +159,8 @@ namespace CraB.Core
 		/// <returns><c>True</c>, если строки равны после обрезания, иначе <c>false</c>.</returns>
 		public static bool TrimmedSame(this string value1, string value2)
 		{
-			return (((value1 == null) || (value1.Length == 0)) && ((value2 == null) || (value2.Length == 0))) || (TrimToNull(value1) == TrimToNull(value2));
+			return (((value1 == null) || (value1.Length == 0)) && ((value2 == null) || (value2.Length == 0)))
+				|| (TrimToNull(value1) == TrimToNull(value2));
 		}
 
 		/// <summary>Убирает в строке пробельные символы слева и справа.</summary>
@@ -167,7 +168,7 @@ namespace CraB.Core
 		/// <returns>Обработанная строка или пустая строка (""), но не <c>null</c>.</returns>
 		public static string TrimToEmpty(this string value)
 		{
-			return value.NullOrEmpty() ? string.Empty : value.Trim();
+			return value.NullOrEmpty() ? "" : value.Trim();
 		}
 
 		/// <summary>Убирает в строке пробельные символы слева и справа.</summary>
