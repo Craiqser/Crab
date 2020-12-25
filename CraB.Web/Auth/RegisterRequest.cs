@@ -27,7 +27,6 @@ namespace CraB.Web
 		[Compare("Password", ErrorMessage = "Auth.Password.CompareNot")]
 		public string PasswordConfirm { get; set; }
 
-		[Required, DefaultValue("en-US")]
 		[DataType(DataType.Text), MinLength(2), MaxLength(7)]
 		public string LangId { get; set; }
 	}

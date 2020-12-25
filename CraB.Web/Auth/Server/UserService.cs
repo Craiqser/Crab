@@ -15,9 +15,9 @@ namespace CraB.Web.Auth.Server
 
 		private static UserInfoOnline AuthenticationTicket(UserAuth userAuth)
 		{
-			foreach (var token in Tokens.Where(t => t.Value.Id == userAuth.Id).ToList())
+			foreach (KeyValuePair<string, UserInfoOnline> token in Tokens.Where(t => t.Value.Id == userAuth.Id).ToList())
 			{
-				Tokens.Remove(token.Key);
+				_ = Tokens.Remove(token.Key);
 			}
 
 			JwtSettings jwtSettings = Dependencies.Resolve<JwtSettings>();
