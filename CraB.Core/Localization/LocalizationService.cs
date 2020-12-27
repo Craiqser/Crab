@@ -24,7 +24,7 @@ namespace CraB.Core
 				}
 			}
 
-			return string.Empty;
+			return "";
 		}
 
 		/// <summary>Добавляет новый перевод в реестр.</summary>
@@ -68,7 +68,7 @@ namespace CraB.Core
 					}
 				}
 
-				searchKey = new Key(string.Empty, key); // В последнюю очередь делаем попытку прочитать значение для инвариантной культуры.
+				searchKey = new Key("", key); // В последнюю очередь делаем попытку прочитать значение для инвариантной культуры.
 
 				if (_resources.TryGetValue(searchKey, out value))
 				{
@@ -82,7 +82,7 @@ namespace CraB.Core
 		}
 
 		/// <summary>Получает все доступные ключи и значения для указанной культуры и её вариантов.</summary>
-		/// <param name="languageId">Идентификатор языка (например, en-US, ru-RU).</param>
+		/// <param name="languageId">Идентификатор языка (например, 'en-US', 'ru-RU').</param>
 		/// <returns>Словарь ключей и значений для указанной культуры.</returns>
 		public Dictionary<string, string> Values(string languageId)
 		{

@@ -7,11 +7,11 @@ namespace CraB.Core
 	public class L
 	{
 		/// <summary>Возвращает постфикс ключа и приводит строку к нормализованному виду.</summary>
-		/// <remarks>Например, если ключ равен "User:Auth:AppLogin", то метод вернёт "App Login".</remarks>
+		/// <remarks>Например, если ключ равен "User.Auth.AppLogin", то метод вернёт "AppLogin".</remarks>
 		/// <param name="key">Ключ.</param>
 		private static string KeyPostfix(string key)
 		{
-			int idx = key.LastIndexOf(':');
+			int idx = key.LastIndexOf('.');
 
 			if (idx > 0)
 			{
@@ -22,7 +22,7 @@ namespace CraB.Core
 		}
 
 		/// <summary>Пустой экземпляр.</summary>
-		public static readonly L Empty = new L(string.Empty);
+		public static readonly L Empty = new L("");
 
 		/// <summary>Ключ.</summary>
 		public string Key { get; }

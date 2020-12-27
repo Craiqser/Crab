@@ -2,7 +2,7 @@
 {
 	public static class CachePrefix
 	{
-		public const string AppSetting = "AppSetting.";
+		public const string App = "App.";
 		public const string Check = "Check.";
 		public const string DataAreas = "DataAreas.";
 		public const string Enum = "Enum.";

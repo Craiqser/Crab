@@ -16,8 +16,6 @@ namespace CraB.Core
 				if (_localizationService == null)
 				{
 					_localizationService = Dependencies.Resolve<ILocalizationService>();
-					_localizationService.NotNull(nameof(_localizationService));
-
 					_localizationService.RegisterAttributes();
 					_localizationService.RegisterEnums();
 				}
@@ -39,7 +37,7 @@ namespace CraB.Core
 
 					if (attr != null)
 					{
-						localizationService.AttributeAdd(type, attr.LanguageId ?? string.Empty, attr.KeyPrefix ?? string.Empty);
+						localizationService.AttributeAdd(type, attr.LanguageId ?? "", attr.KeyPrefix ?? "");
 					}
 				}
 			}
@@ -56,7 +54,7 @@ namespace CraB.Core
 				if (fieldInfo != null)
 				{
 					object value = fieldInfo.GetValue(null) ?? fieldInfo.Name;
-					localizationService.Add(languageId, $"{prefix}:{fieldInfo.Name}", value.ToString());
+					localizationService.Add(languageId, $"{prefix}.{fieldInfo.Name}", value.ToString());
 				}
 			}
 		}
@@ -88,7 +86,7 @@ namespace CraB.Core
 
 							if (descriptionAttribute != null)
 							{
-								localizationService.Add(languageId, $"{CachePrefix.Enum}{enumKey}:{name}", descriptionAttribute.Description);
+								localizationService.Add(languageId, $"{CachePrefix.Enum}{enumKey}.{name}", descriptionAttribute.Description);
 							}
 						}
 					}
