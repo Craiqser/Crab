@@ -28,7 +28,7 @@ namespace CraB.Core
 
 		/// <summary>Возвращает название культуры из списка поддерживаемых культур.</summary>
 		/// <param name="langId">Требуемая культура.</param>
-		public static  string LangId(string langId)
+		public static string LangId(string langId)
 		{
 			return Languages.Contains(langId) ? langId : LangIdFallback(langId);
 		}

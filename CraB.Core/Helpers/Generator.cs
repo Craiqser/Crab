@@ -16,7 +16,7 @@ namespace CraB.Core
 
 			byte[] guid = Guid.NewGuid().ToByteArray();
 
-			return BitConverter.ToString(guid).Replace("-", string.Empty, Invariant.Comparison).Substring(0, length);
+			return BitConverter.ToString(guid).Replace("-", "", Invariant.Comparison).Substring(0, length);
 		}
 
 		/// <summary>Генерирует хэш длиной 86 символов для указанной строки, используя алгоритм <see cref="SHA512"/>.</summary>
@@ -35,7 +35,7 @@ namespace CraB.Core
 			}
 			else
 			{
-				salt = string.Empty;
+				salt = "";
 			}
 
 			byte[] buffer = System.Text.Encoding.UTF8.GetBytes(value + salt);

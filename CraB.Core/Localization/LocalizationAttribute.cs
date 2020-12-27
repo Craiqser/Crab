@@ -9,10 +9,10 @@ namespace CraB.Core
 	public class LocalizationAttribute : Attribute
 	{
 		/// <summary>Культура.</summary>
-		public string LanguageId { get; set; } = string.Empty;
+		public string LanguageId { get; set; } = "";
 
 		/// <summary>Префикс ключа.</summary>
-		public string KeyPrefix { get; set; } = string.Empty;
+		public string KeyPrefix { get; set; } = "";
 
 		/// <summary>Инициализирует новый экземпляр класса <see cref="LocalizationAttribute" />.</summary>
 		public LocalizationAttribute()

@@ -13,17 +13,16 @@ namespace CraB.Debug
 	{
 		static void Main()
 		{
-			/* Тестирование локализации.
-			Project.AssemblyAdd(typeof(IAuthUser).Assembly);
+			// Тестирование локализации.
+			Project.AssemblyAdd(typeof(DataAreaTest).Assembly);
 
 			// Настройка локализации для тестирования.
 			ServiceCollection services = new ServiceCollection();
-			services.AddSingleton<ILocalizationService, LocalizationService>();
+			_ = services.AddSingleton<ILocalizationService, LocalizationService>();
 			IServiceProvider provider = services.BuildServiceProvider();
 			Dependencies.ServiceProviderSet(provider);
 
-			Console.WriteLine(L.Get("User:Auth:AppLogin"));
-			*/
+			Console.WriteLine(L.Get("Auth.AccountNo"));
 
 			/*
 			// Тестирование запросов Dapper.
@@ -37,9 +36,6 @@ namespace CraB.Debug
 				Console.WriteLine($"{c.Id} - {c.Name}");
 			}
 			*/
-
-			TimeSpan duration = TimeSpan.FromMinutes(5);
-			Console.WriteLine($"{duration.TotalSeconds}");
 
 			_ = Console.ReadKey();
 		}
