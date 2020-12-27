@@ -12,6 +12,9 @@ namespace CraB.Web.Auth
 		/// <summary>Код пользователя.</summary>
 		public int Id { get; init; }
 
+		/// <summary>Язык интерфейса пользователя.</summary>
+		public string LangId { get; init; }
+
 		/// <summary>Логин пользователя.</summary>
 		public string Login { get; init; }
 

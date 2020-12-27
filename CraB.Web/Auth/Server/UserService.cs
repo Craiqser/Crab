@@ -26,6 +26,7 @@ namespace CraB.Web.Auth.Server
 			{
 				ExpiresAt = DateTime.UtcNow.AddMinutes(jwtSettings.ExpiryMinutes),
 				Id = userAuth.Id,
+				LangId = userAuth.LangId,
 				Login = userAuth.Login,
 				SecurityKeys = new Dictionary<string, string>(),
 				Token = tokenOnline
@@ -69,7 +70,7 @@ namespace CraB.Web.Auth.Server
 
 		public async Task<UserAuth> GetUserAuthAsync(string login)
 		{
-			string sql = @"select t.Id, t.[Login], t.PasswordHash, t.PasswordSalt, t.Active from dbo.Users as t with(nolock) where (t.[Login] = @Login);";
+			string sql = @"select t.Id, t.[Login], t.PasswordHash, t.PasswordSalt, t.LangId, t.Active from dbo.Users as t with(nolock) where (t.[Login] = @Login);";
 			return await Query.SingleOrDefaultAsync<UserAuth>(sql, new { Login = login });
 		}
 
